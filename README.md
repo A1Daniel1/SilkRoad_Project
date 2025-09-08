@@ -57,6 +57,7 @@ El mayor logro fue **lograr que el código en Java funcionara correctamente**. F
 ---
 
 ### 5. ¿Cuál consideran que fue el mayor problema técnico? ¿Qué hicieron para resolverlo?  
+
 El mayor problema técnico fue entender cómo programar las clases (`SilkRoad`, `Store`, `Robot`) y lograr que interactuaran entre sí de manera correcta.  
 La solución fue trabajar en conjunto, dividir responsabilidades y hacer varias pruebas hasta que el sistema funcionó como se esperaba.
 Ademas de que tuvimos que trabajar mas por nuestra cuenta con la informacion que teniamos a mano
