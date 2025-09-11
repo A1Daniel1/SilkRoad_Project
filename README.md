@@ -15,20 +15,25 @@ El simulador puede funcionar en modo **visible** (usando `shapes`) o en modo **i
 ## Funcionalidades
 1. Crear una ruta de seda.
 2. Adicionar / eliminar tiendas.
-3. Reabastecer tiendas.
-4. Adicionar / eliminar robots.
-5. Retornar robots a su posición inicial.
-6. Mover un robot.
-7. Reiniciar la ruta de seda.
-8. Consultar ganancias e información.
-9. Hacer visible o invisible el simulador.
-10. Finalizar el simulador.
+3. Adicionar / eliminar robots.
+4. Mover un robot.
+5. Reiniciar la ruta de seda.
+6. Hacer visible o invisible el simulador.
+7. Finalizar el simulador.
 
 ## Tecnologías
 - **Java (BlueJ)**  
 - **Astah** (diagramas UML)  
 - **Shapes** (paquete gráfico provisto por el curso)
 # Retrospectiva — Proyecto SilkRoad
+
+## Diagramas de clase
+![Captura de pantalla](imagenes/Captura%20de%20pantalla_2025-09-11_18-00-24.png)
+
+## Diagramas de secuencia
+![Captura de pantalla 2](imagenes/Captura%20de%20pantalla_2025-09-11_18-00-47.png)
+![Captura de pantalla 3](imagenes/Captura%20de%20pantalla_2025-09-11_18-01-05.png)
+![Captura de pantalla 4](imagenes/Captura%20de%20pantalla_2025-09-11_18-02-07.png)
 
 ### 1. ¿Cuáles fueron los mini-ciclos definidos? Justifíquenlos.  
 Definimos tres mini-ciclos principales:  
