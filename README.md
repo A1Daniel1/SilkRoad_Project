@@ -8,7 +8,6 @@ Este proyecto implementa un **simulador de la Ruta de la Seda**, en el cual se p
 - Tiendas (agregar, eliminar, reabastecer).
 - Robots (agregar, eliminar, mover, devolver a su posición inicial).
 - La ruta de la seda con una longitud definida.
-- Consultar información y ganancias.
 
 El simulador puede funcionar en modo **visible** (usando `shapes`) o en modo **invisible**.
 
