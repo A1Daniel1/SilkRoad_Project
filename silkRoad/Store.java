@@ -24,6 +24,8 @@ public class Store {
     private static final String[] COLORS = {"red", "blue", "green", "yellow", "magenta", "black"};
     private static int colorIndex = 0; 
 
+    private int timesEmptied;
+
     /**
      * Crea una nueva tienda en una ubicación específica con un capital inicial.
      *
@@ -38,6 +40,7 @@ public class Store {
         this.visualRepresentation.changeSize(30, 30);
         this.visualRepresentation.moveHorizontal(location); 
         this.visualRepresentation.moveVertical(50);
+        this.timesEmptied = 0;
         assignColor();
     }
 
@@ -54,6 +57,21 @@ public class Store {
     /** @return cantidad actual de tenges */
     public int getCurrentTenges() {
         return currentTenges;
+    }
+
+    /** @return cantidad de veces que fue desocupada */
+    public int getTimesEmptied() { 
+        return timesEmptied; 
+    }
+
+    /** Vacia la tienda y retorna la cantidad de tenges */
+    public int empty() {
+        int collected = this.currentTenges;
+        if (collected > 0) {
+            this.currentTenges = 0;
+            timesEmptied++;
+        }
+        return collected;
     }
 
     /**

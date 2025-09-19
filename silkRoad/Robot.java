@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.util.Random;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * La clase {@code Robot} representa un robot dentro de la simulación Silk Road.
@@ -20,6 +22,7 @@ public class Robot {
     private Circle visualRepresentation;
     private static final String[] COLORS = {"red", "blue", "green", "yellow", "magenta", "black"};
     private static int colorIndex = 0; 
+    private List<Integer> profits;
 
     /**
      * Crea un robot en una ubicación inicial específica.
@@ -34,6 +37,7 @@ public class Robot {
         this.visualRepresentation.moveHorizontal(location); 
         this.visualRepresentation.moveVertical(100); 
         assignColor();
+        this.profits = new ArrayList<>();
     }
 
     /** @return ubicación inicial del robot */
@@ -85,5 +89,20 @@ public class Robot {
     private void assignColor() {
         visualRepresentation.changeColor(COLORS[colorIndex]);
         colorIndex = (colorIndex + 1) % COLORS.length; 
+    }
+
+    /** Registrar una ganancia de movimiento */
+    public void addProfit(int profit) {
+        profits.add(profit);
+    }
+
+    /** Devuelve todas las ganancias registradas */
+    public List<Integer> getProfits() {
+        return profits;
+    }
+
+    /** Devuelve la ganancia total acumulada */
+    public int getTotalProfit() {
+        return profits.stream().mapToInt(Integer::intValue).sum();
     }
 }

@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * La clase {@code SilkRoad} representa la carretera principal donde interactúan
@@ -24,6 +26,10 @@ public class SilkRoad {
     private long totalProfit;
     private boolean isVisible;
     private boolean lastOperationOk;
+    private Map<Integer, Store> storeMap = new HashMap<>();
+    private Map<Integer, Robot> robotMap = new HashMap<>();
+    private Rectangle road;
+
     
     
         /**
@@ -38,6 +44,12 @@ public class SilkRoad {
         this.totalProfit = 0;
         this.isVisible = false;
         this.lastOperationOk = true;
+
+        this.road = new Rectangle();
+        this.road.changeColor("gray");
+        this.road.changeSize(40, length);
+        this.road.moveHorizontal(0);
+        this.road.moveVertical(75); 
     }
     
      /**
@@ -243,6 +255,9 @@ public class SilkRoad {
         lastOperationOk = false;
         Canvas.getCanvas().setVisible(true);
         this.isVisible = true;
+
+        road.makeVisible();
+
         for (Store s : stores) {
             s.makeVisible();
         }
@@ -259,6 +274,7 @@ public class SilkRoad {
         lastOperationOk = false;
         Canvas.getCanvas().setVisible(false);
         this.isVisible = false;
+        road.makeInvisible();
         lastOperationOk = true;
     }
 
@@ -276,5 +292,67 @@ public class SilkRoad {
      */
     public boolean ok() {
         return this.lastOperationOk;
+    }
+
+    /**
+ * Crea la ruta de seda a partir de una entrada con enteros.
+ * Formato:
+ * {1, x} -> robot en x
+ * {2, x, c} -> tienda en x con c tenges
+ */
+    public void createFromInput(int[][] lines) {
+        for (int[] parts : lines) {
+            if (parts[0] == 1) { // robot
+                int x = parts[1];
+                placeRobot(x);
+            } else if (parts[0] == 2) { // tienda
+                int x = parts[1];
+                int c = parts[2];
+                placeStore(x, c);
+            }
+        }
+    }
+
+  
+           
+
+    /**
+     * Movimiento automático de robots buscando maximizar ganancias.
+     * Estrategia greedy simple: cada robot toma la tienda más rentable disponible.
+     */
+    public void autoMoveRobots() {
+        for (Robot robot : robots) {
+            Store bestStore = null;
+            int bestProfit = Integer.MIN_VALUE;
+            for (Store store : stores) {
+                if (store.getCurrentTenges() > 0) {
+                    int distance = Math.abs(robot.getCurrentLocation() - store.getLocation());
+                    int profit = store.getCurrentTenges() - distance;
+                    if (profit > bestProfit) {
+                        bestProfit = profit;
+                        bestStore = store;
+                    }
+                }
+            }
+            if (bestStore != null && bestProfit > 0) {
+                // mover robot
+                robot.moveTo(bestStore.getLocation());
+                int collected = bestStore.empty();
+                robot.addProfit(collected - Math.abs(robot.getCurrentLocation() - bestStore.getLocation()));
+                totalProfit += bestProfit;
+            }
+        }
+    }
+
+    /** Consulta: cuántas veces ha sido desocupada cada tienda */
+    public Map<Integer, Integer> consultStoreStats() {
+        return stores.stream()
+            .collect(Collectors.toMap(Store::getLocation, Store::getTimesEmptied));
+    }
+
+    /** Consulta: ganancias de cada robot */
+    public Map<Integer, List<Integer>> consultRobotStats() {
+        return robots.stream()
+            .collect(Collectors.toMap(Robot::getInitialLocation, Robot::getProfits));
     }
 }
