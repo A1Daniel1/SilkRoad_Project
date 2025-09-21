@@ -28,7 +28,8 @@ public class SilkRoad {
     private boolean lastOperationOk;
     private Map<Integer, Store> storeMap = new HashMap<>();
     private Map<Integer, Robot> robotMap = new HashMap<>();
-    private Rectangle road;
+    private Road road;
+
 
     
     
@@ -38,18 +39,16 @@ public class SilkRoad {
      * @param length longitud de la carretera
      */
     public SilkRoad(int length) {
+        Canvas canvas = Canvas.getCanvas();
+        canvas.eraseAll(); //se me quedaba lo del anterior canvas
+
         this.length = length;
         this.stores = new ArrayList<>();
         this.robots = new ArrayList<>();
         this.totalProfit = 0;
         this.isVisible = false;
         this.lastOperationOk = true;
-
-        this.road = new Rectangle();
-        this.road.changeColor("gray");
-        this.road.changeSize(40, length);
-        this.road.moveHorizontal(0);
-        this.road.moveVertical(75); 
+        this.road = new Road(length); 
     }
     
      /**
@@ -256,7 +255,6 @@ public class SilkRoad {
         Canvas.getCanvas().setVisible(true);
         this.isVisible = true;
 
-        road.makeVisible();
 
         for (Store s : stores) {
             s.makeVisible();
@@ -264,6 +262,9 @@ public class SilkRoad {
         for (Robot r : robots) {
             r.makeVisible();
         }
+
+        road.makeVisible();
+
         lastOperationOk = true;
     }
 

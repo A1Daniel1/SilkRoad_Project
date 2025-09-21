@@ -1,0 +1,18 @@
+#BlueJ class context
+comment0.target=Road
+comment0.text=\n\ La\ clase\ {@code\ Road}\ representa\ la\ carretera\ de\ la\ Ruta\ de\ la\ Seda.\n\ \n\ Dibuja\ la\ carretera\ como\ una\ espiral\ cuadrada\ formada\ por\ franjas\n\ rectangulares\ continuas.\ Cada\ tramo\ (derecha,\ abajo,\ izquierda,\ arriba)\n\ se\ dibuja\ como\ un\ \u00FAnico\ rect\u00E1ngulo\ largo,\ de\ modo\ que\ la\ carretera\n\ quede\ visualmente\ continua.\n\ \n\ @author\ Daniel\n\ @version\ 2025-2\n
+comment1.params=length
+comment1.target=Road(int)
+comment2.params=length
+comment2.target=void\ drawRoad(int)
+comment2.text=\n\ Dibuja\ el\ camino\ por\ secciones\n
+comment3.params=
+comment3.target=void\ makeVisible()
+comment3.text=Hace\ visible\ la\ carretera
+comment4.params=
+comment4.target=void\ makeInvisible()
+comment4.text=Hace\ invisible\ la\ carretera
+comment5.params=
+comment5.target=void\ clear()
+comment5.text=Limpia\ los\ segmentos
+numComments=6

@@ -35,7 +35,7 @@ public class Robot {
         this.visualRepresentation = new Circle();
         this.visualRepresentation.changeSize(20); 
         this.visualRepresentation.moveHorizontal(location); 
-        this.visualRepresentation.moveVertical(100); 
+        this.visualRepresentation.moveVertical(60); 
         assignColor();
         this.profits = new ArrayList<>();
     }
