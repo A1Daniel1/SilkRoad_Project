@@ -1,20 +1,12 @@
-import java.awt.Color;
-import java.util.Random;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.Timer;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**
- * La clase {@code Robot} representa un robot dentro de la simulación Silk Road.
- * 
- * Cada robot tiene:
- * <ul>
- *   <li>Una posición inicial en la carretera</li>
- *   <li>Una posición actual</li>
- *   <li>Una representación visual (círculo de color)</li>
- * </ul>
- * 
- * El robot puede moverse, regresar a su posición inicial y mostrarse u ocultarse.
+ * La clase Robot representa un robot dentro de la simulación Silk Road.
+ * El robot con mayor ganancia parpadea para destacarse visualmente.
  */
 public class Robot {
     private int initialLocation;
@@ -23,9 +15,14 @@ public class Robot {
     private static final String[] COLORS = {"red", "blue", "green", "yellow", "magenta", "black"};
     private static int colorIndex = 0; 
     private List<Integer> profits;
+    private String originalColor;
+    private boolean isBlinking;
+    private Timer blinkTimer;
+    private boolean isVisible;
+    private int blinkCount;
 
     /**
-     * Crea un robot en una ubicación inicial específica.
+     * Constructor que crea un robot en una ubicación inicial específica.
      *
      * @param location posición inicial del robot
      */
@@ -36,25 +33,22 @@ public class Robot {
         this.visualRepresentation.changeSize(20); 
         this.visualRepresentation.moveHorizontal(location); 
         this.visualRepresentation.moveVertical(60); 
-        assignColor();
         this.profits = new ArrayList<>();
+        this.isBlinking = false;
+        this.isVisible = false;
+        this.blinkCount = 0;
+        assignColor();
+        setupBlinkTimer();
     }
 
-    /** @return ubicación inicial del robot */
     public int getInitialLocation() {
         return initialLocation;
     }
 
-    /** @return ubicación actual del robot */
     public int getCurrentLocation() {
         return currentLocation;
     }
 
-    /**
-     * Cambia la posición actual del robot.
-     *
-     * @param location nueva ubicación
-     */
     public void setCurrentLocation(int location) {
         this.currentLocation = location;
     }
@@ -69,40 +63,123 @@ public class Robot {
         this.currentLocation = targetLocation;
     }
 
-    /** Regresa al robot a su posición inicial. */
+    /**
+     * Regresa al robot a su posición inicial.
+     */
     public void returnToInitialPosition() {
         visualRepresentation.moveHorizontal(this.initialLocation - this.currentLocation);
         this.currentLocation = this.initialLocation;
     }
 
-    /** Hace visible la representación gráfica del robot. */
     public void makeVisible() {
         visualRepresentation.makeVisible();
+        this.isVisible = true;
     }
 
-    /** Oculta la representación gráfica del robot. */
     public void makeInvisible() {
+        this.isVisible = false;
+        stopBlinking();
         visualRepresentation.makeInvisible();
     }
 
-    /** Asigna un color al robot de forma cíclica. */
-    private void assignColor() {
-        visualRepresentation.changeColor(COLORS[colorIndex]);
-        colorIndex = (colorIndex + 1) % COLORS.length; 
-    }
-
-    /** Registrar una ganancia de movimiento */
+    /**
+     * Registra una ganancia de movimiento.
+     *
+     * @param profit ganancia obtenida en el movimiento
+     */
     public void addProfit(int profit) {
         profits.add(profit);
     }
 
-    /** Devuelve todas las ganancias registradas */
     public List<Integer> getProfits() {
-        return profits;
+        return new ArrayList<>(profits);
     }
 
-    /** Devuelve la ganancia total acumulada */
+    /**
+     * @return la ganancia total acumulada
+     */
     public int getTotalProfit() {
         return profits.stream().mapToInt(Integer::intValue).sum();
+    }
+
+    /**
+     * Inicia el efecto de parpadeo para el robot con mayor ganancia.
+     * El robot parpadeará 6 veces y luego se detendrá.
+     */
+    public void startBlinking() {
+        if (!isBlinking && isVisible) {
+            isBlinking = true;
+            blinkCount = 0;
+            blinkTimer.start();
+        }
+    }
+
+    /**
+     * Detiene el efecto de parpadeo.
+     */
+    public void stopBlinking() {
+        if (isBlinking) {
+            isBlinking = false;
+            blinkCount = 0;
+            if (blinkTimer != null) {
+                blinkTimer.stop();
+            }
+            visualRepresentation.changeColor(originalColor);
+        }
+    }
+
+    /**
+     * Limpia todas las ganancias registradas.
+     */
+    public void clearProfits() {
+        profits.clear();
+    }
+
+    /**
+     * Destruye el robot y libera recursos.
+     */
+    public void destroy() {
+        stopBlinking();
+        if (blinkTimer != null) {
+            blinkTimer.stop();
+            blinkTimer = null;
+        }
+        makeInvisible();
+    }
+
+    /**
+     * Asigna un color al robot de forma cíclica.
+     */
+    private void assignColor() {
+        originalColor = COLORS[colorIndex];
+        visualRepresentation.changeColor(originalColor);
+        colorIndex = (colorIndex + 1) % COLORS.length; 
+    }
+
+    /**
+     * Configura el timer para el efecto de parpadeo.
+     * El robot parpadea 6 veces (12 cambios de color) y luego se detiene.
+     */
+    private void setupBlinkTimer() {
+        blinkTimer = new Timer(400, new ActionListener() {
+            private boolean showOriginal = true;
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (isBlinking && isVisible && blinkCount < 12) {
+                    if (showOriginal) {
+                        visualRepresentation.changeColor("white");
+                    } else {
+                        visualRepresentation.changeColor(originalColor);
+                    }
+                    showOriginal = !showOriginal;
+                    blinkCount++;
+                    
+                    if (blinkCount >= 12) {
+                        stopBlinking();
+                    }
+                }
+            }
+        });
     }
 }

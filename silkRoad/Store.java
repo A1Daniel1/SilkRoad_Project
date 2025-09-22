@@ -14,23 +14,23 @@ import java.util.Arrays;
  * </ul>
  * 
  * El color de la tienda se asigna de forma cíclica a partir de una lista predefinida.
+ * Las tiendas desocupadas lucen diferentes a las que tienen mercancía.
  */
 public class Store {
     private int location;
     private int initialTenges;
     private int currentTenges;
     private Rectangle visualRepresentation;
-
-    private static final String[] COLORS = {"red", "blue", "green", "yellow", "magenta", "black"};
+    private static final String[] COLORS = {"red", "blue", "green", "yellow", "magenta", "orange"};
     private static int colorIndex = 0; 
-
     private int timesEmptied;
+    private String originalColor;
 
     /**
-     * Crea una nueva tienda en una ubicación específica con un capital inicial.
+     * Constructor que crea una nueva tienda.
      *
      * @param location posición horizontal de la tienda en la carretera
-     * @param tenges   cantidad inicial de tenges
+     * @param tenges cantidad inicial de tenges
      */
     public Store(int location, int tenges) {
         this.location = location;
@@ -44,64 +44,85 @@ public class Store {
         assignColor();
     }
 
-    /** @return ubicación de la tienda */
     public int getLocation() {
         return location;
     }
 
-    /** @return cantidad inicial de tenges */
     public int getInitialTenges() {
         return initialTenges;
     }
 
-    /** @return cantidad actual de tenges */
     public int getCurrentTenges() {
         return currentTenges;
     }
 
-    /** @return cantidad de veces que fue desocupada */
     public int getTimesEmptied() { 
         return timesEmptied; 
     }
 
-    /** Vacia la tienda y retorna la cantidad de tenges */
+    /**
+     * Vacía la tienda y retorna la cantidad de tenges.
+     *
+     * @return cantidad de tenges recolectados
+     */
     public int empty() {
         int collected = this.currentTenges;
         if (collected > 0) {
             this.currentTenges = 0;
             timesEmptied++;
+            updateAppearance();
         }
         return collected;
     }
 
-    /**
-     * Modifica la cantidad actual de tenges.
-     * 
-     * @param amount nuevo valor de tenges
-     */
     public void setCurrentTenges(int amount) {
         this.currentTenges = amount;
+        updateAppearance();
     }
 
-    /** Restablece la cantidad de tenges al valor inicial. */
+    /**
+     * Restablece la cantidad de tenges al valor inicial.
+     */
     public void resupply() {
         this.currentTenges = this.initialTenges;
+        updateAppearance();
     }
 
-    /** Hace visible la representación gráfica de la tienda. */
     public void makeVisible() {
         visualRepresentation.makeVisible();
     }
 
-    /** Oculta la representación gráfica de la tienda. */
     public void makeInvisible() {
         visualRepresentation.makeInvisible();
     }
 
-    /** Asigna un color a la tienda de forma cíclica. */
+    /**
+     * Actualiza la apariencia de la tienda según su estado.
+     * Las tiendas vacías se ven grises y más pequeñas.
+     */
+    public void updateAppearance() {
+        if (currentTenges == 0) {
+            visualRepresentation.changeColor("grey");
+            visualRepresentation.changeSize(20, 20);
+        } else {
+            visualRepresentation.changeColor(originalColor);
+            visualRepresentation.changeSize(30, 30);
+        }
+    }
+
+    /**
+     * Resetea el contador de veces vaciada.
+     */
+    public void resetTimesEmptied() {
+        this.timesEmptied = 0;
+    }
+
+    /**
+     * Asigna un color a la tienda de forma cíclica.
+     */
     private void assignColor() {
-        visualRepresentation.changeColor(COLORS[colorIndex]);
+        originalColor = COLORS[colorIndex];
+        visualRepresentation.changeColor(originalColor);
         colorIndex = (colorIndex + 1) % COLORS.length;
     }
 }
-
