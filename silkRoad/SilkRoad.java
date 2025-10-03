@@ -18,6 +18,7 @@ public class SilkRoad {
     private boolean isVisible;
     private boolean lastOperationOk;
     private Road road;
+    private ProgressBar progressBar;
 
     /**
      * Constructor que crea una nueva carretera Silk Road.
@@ -34,7 +35,10 @@ public class SilkRoad {
         this.totalProfit = 0;
         this.isVisible = false;
         this.lastOperationOk = true;
-        this.road = new Road(length); 
+        this.road = new Road(length);
+     
+        this.progressBar = new ProgressBar(100, 50, 150, 400, 20);
+        this.progressBar.makeVisible();
     }
     
     /**
@@ -66,6 +70,7 @@ public class SilkRoad {
             newStore.makeVisible();
         }
         
+        updateProgressBar();
         lastOperationOk = true;
     }
 
@@ -90,6 +95,7 @@ public class SilkRoad {
                 storeToRemove.makeInvisible();
             }
             stores.remove(storeToRemove);
+            updateProgressBar();
             lastOperationOk = true;
         } else {
             showError("No se encontró tienda en la ubicación " + location);
@@ -124,6 +130,7 @@ public class SilkRoad {
             newRobot.makeVisible();
         }
         
+        updateProgressBar();
         lastOperationOk = true;
     }
     
@@ -146,6 +153,7 @@ public class SilkRoad {
         if (robotToRemove != null) {
             robotToRemove.destroy();
             robots.remove(robotToRemove);
+            updateProgressBar();
             lastOperationOk = true;
         } else {
             showError("No se encontró robot en la ubicación " + location);
@@ -177,6 +185,7 @@ public class SilkRoad {
             }
             robotToMove.moveTo(targetLocation);
             Collections.sort(robots, Comparator.comparingInt(Robot::getCurrentLocation));
+            updateProgressBar();
             lastOperationOk = true;
         } else {
             showError("No se encontró robot en la ubicación " + location);
@@ -192,6 +201,7 @@ public class SilkRoad {
             s.resupply();
         }
         updateStoreAppearances();
+        updateProgressBar();
         lastOperationOk = true;
     }
 
@@ -204,6 +214,7 @@ public class SilkRoad {
             r.returnToInitialPosition();
         }
         Collections.sort(robots, Comparator.comparingInt(Robot::getCurrentLocation));
+        updateProgressBar();
         lastOperationOk = true;
     }
 
@@ -224,6 +235,7 @@ public class SilkRoad {
             s.resetTimesEmptied();
         }
         
+        progressBar.reset();
         updateVisualEffects();
         lastOperationOk = true;
     }
@@ -345,7 +357,10 @@ public class SilkRoad {
      * Movimiento automático de robots buscando maximizar ganancias.
      */
     public void autoMoveRobots() {
-        for (Robot robot : robots) {
+        progressBar.setValue(0);
+        
+        for (int i = 0; i < robots.size(); i++) {
+            Robot robot = robots.get(i);
             Store bestStore = null;
             int bestProfit = Integer.MIN_VALUE;
             
@@ -368,7 +383,18 @@ public class SilkRoad {
                 robot.addProfit(collected - distance);
                 totalProfit += bestProfit;
             }
+            
+            
+            int progress = ((i + 1) * 100) / robots.size();
+            progressBar.setValue(progress);
+            try {
+                Thread.sleep(100); 
+            } catch (InterruptedException e) {
+               
+            }
         }
+        
+        progressBar.setValue(100);
         updateVisualEffects();
     }
 
@@ -461,6 +487,47 @@ public class SilkRoad {
                 robot.stopBlinking();
             }
         }
+    }
+
+    /**
+     * Actualiza la barra de progreso basada en el estado de la simulación.
+     */
+    private void updateProgressBar() {
+        if (stores.isEmpty() && robots.isEmpty()) {
+            progressBar.setValue(0);
+            return;
+        }
+        
+        // Calcular progreso basado en múltiples factores
+        int storeProgress = Math.min(stores.size() * 10, 25); // Máximo 25% por tiendas
+        int robotProgress = Math.min(robots.size() * 10, 25); // Máximo 25% por robots
+        int profitProgress = (int) Math.min(totalProfit / 10, 25); // Máximo 25% por ganancias
+        int activityProgress = calculateActivityProgress(); // Máximo 25% por actividad
+        
+        int totalProgress = storeProgress + robotProgress + profitProgress + activityProgress;
+        progressBar.setValue(totalProgress);
+    }
+
+    /**
+     * Calcula el progreso basado en la actividad de la simulación.
+     */
+    private int calculateActivityProgress() {
+        int activity = 0;
+
+        for (Store store : stores) {
+            if (store.getTimesEmptied() > 0) {
+                activity += 5;
+            }
+        }
+        
+    
+        for (Robot robot : robots) {
+            if (robot.getTotalProfit() > 0) {
+                activity += 5;
+            }
+        }
+        
+        return Math.min(activity, 25);
     }
 
     /**
