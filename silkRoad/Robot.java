@@ -1,19 +1,23 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Timer;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 /**
  * La clase Robot representa un robot dentro de la simulación Silk Road.
  * El robot con mayor ganancia parpadea para destacarse visualmente.
+ *
+ * @author Daniel Ahumada y Juan Neira
+ * @version ciclo 3
  */
 public class Robot {
     private int initialLocation;
     private int currentLocation;
     private Circle visualRepresentation;
-    private static final String[] COLORS = {"red", "blue", "green", "yellow", "magenta", "black"};
-    private static int colorIndex = 0; 
+    private Road road;
+    private static final String[] COLORS = {"red", "blue", "green", "yellow", "magenta", "black", "orange", "pink", "cyan", "purple"};
+    private static int colorIndex = 0;
     private List<Integer> profits;
     private String originalColor;
     private boolean isBlinking;
@@ -24,15 +28,18 @@ public class Robot {
     /**
      * Constructor que crea un robot en una ubicación inicial específica.
      *
+     * @param road la carretera
      * @param location posición inicial del robot
      */
-    public Robot(int location) {
+    public Robot(Road road, int location) {
+        this.road = road;
         this.initialLocation = location;
         this.currentLocation = location;
         this.visualRepresentation = new Circle();
-        this.visualRepresentation.changeSize(20); 
-        this.visualRepresentation.moveHorizontal(location); 
-        this.visualRepresentation.moveVertical(60); 
+        this.visualRepresentation.changeSize(20);
+        int x = road.getX(location) + 20;
+        int y = road.getY(location) + 20;
+        this.visualRepresentation.setPosition(x, y);
         this.profits = new ArrayList<>();
         this.isBlinking = false;
         this.isVisible = false;
@@ -59,7 +66,9 @@ public class Robot {
      * @param targetLocation nueva ubicación
      */
     public void moveTo(int targetLocation) {
-        visualRepresentation.moveHorizontal(targetLocation - this.currentLocation);
+        int targetX = road.getX(targetLocation) + 20;
+        int targetY = road.getY(targetLocation) + 20;
+        visualRepresentation.setPosition(targetX, targetY);
         this.currentLocation = targetLocation;
     }
 
@@ -67,7 +76,9 @@ public class Robot {
      * Regresa al robot a su posición inicial.
      */
     public void returnToInitialPosition() {
-        visualRepresentation.moveHorizontal(this.initialLocation - this.currentLocation);
+        int initialX = road.getX(this.initialLocation) + 20;
+        int initialY = road.getY(this.initialLocation) + 20;
+        visualRepresentation.setPosition(initialX, initialY);
         this.currentLocation = this.initialLocation;
     }
 

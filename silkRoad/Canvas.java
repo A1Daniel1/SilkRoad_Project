@@ -25,7 +25,7 @@ public class Canvas{
      */
     public static Canvas getCanvas (){
         if(canvasSingleton == null) {
-            canvasSingleton = new Canvas("BlueJ Shapes Demo",  1000, 200, 
+            canvasSingleton = new Canvas("BlueJ Shapes Demo",  1000, 1000, 
                                          Color.white);
         }
         canvasSingleton.setVisible(true);
@@ -94,7 +94,7 @@ public class Canvas{
     public void draw(Object referenceObject, String color, Shape shape){
         objects.remove(referenceObject);   // just in case it was already there
         objects.add(referenceObject);      // add at the end
-        shapes.put(referenceObject, new ShapeDescription(shape, color));
+        shapes.put(referenceObject, new ShapeDescription(shape, color, referenceObject));
         redraw();
     }
  
@@ -187,23 +187,40 @@ public class Canvas{
     private class ShapeDescription{
         private Shape shape;
         private String colorString;
+        private Object ref;
 
-        public ShapeDescription(Shape shape, String color){
+        public ShapeDescription(Shape shape, String color, Object ref){
             this.shape = shape;
             colorString = color;
+            this.ref = ref;
         }
 
         public void draw(Graphics2D graphic){
-            setForegroundColor(colorString);
-            graphic.draw(shape);
-            graphic.fill(shape);
+            if (ref instanceof celda) {
+                graphic.setStroke(new java.awt.BasicStroke(3));
+                graphic.setColor(Color.black);
+                graphic.draw(shape);
+                graphic.setColor(Color.white);
+                graphic.fill(shape);
+            } else {
+                setForegroundColor(colorString);
+                graphic.draw(shape);
+                graphic.fill(shape);
+            }
         }
     }
 
     /** borrar todo */
 
     public void eraseAll() {
-        objects.clear();       
+        objects.clear();
+    }
+
+    /**
+     * Get the Graphics2D object for direct drawing.
+     */
+    public Graphics2D getGraphic() {
+        return graphic;
     }
 
 }

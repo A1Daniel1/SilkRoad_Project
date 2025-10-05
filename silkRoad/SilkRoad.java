@@ -2,13 +2,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.*;
-import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 /**
  * La clase SilkRoad representa la carretera principal donde interactúan
  * robots y tiendas en la simulación de la Ruta de la Seda.
+ *
+ * @author Daniel Ahumada y Juan Neira
+ * @version ciclo 3
  */
 public class SilkRoad {
     private int length;
@@ -37,7 +38,7 @@ public class SilkRoad {
         this.lastOperationOk = true;
         this.road = new Road(length);
      
-        this.progressBar = new ProgressBar(100, 50, 150, 400, 20);
+        this.progressBar = new ProgressBar(100, 50, 50, 400, 20);
         this.progressBar.makeVisible();
     }
     
@@ -62,7 +63,7 @@ public class SilkRoad {
             }
         }
 
-        Store newStore = new Store(location, tenges);
+        Store newStore = new Store(road, location, tenges);
         stores.add(newStore);
         Collections.sort(stores, Comparator.comparingInt(Store::getLocation));
         
@@ -122,7 +123,7 @@ public class SilkRoad {
             }
         }
 
-        Robot newRobot = new Robot(location);
+        Robot newRobot = new Robot(road, location);
         robots.add(newRobot);
         Collections.sort(robots, Comparator.comparingInt(Robot::getCurrentLocation)); 
         
@@ -281,15 +282,16 @@ public class SilkRoad {
         Canvas.getCanvas().setVisible(true);
         this.isVisible = true;
 
+        road.makeVisible();
+
         for (Store s : stores) {
             s.makeVisible();
         }
-        
+
         for (Robot r : robots) {
             r.makeVisible();
         }
 
-        road.makeVisible();
         updateVisualEffects();
         lastOperationOk = true;
     }

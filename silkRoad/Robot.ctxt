@@ -1,9 +1,9 @@
 #BlueJ class context
 comment0.target=Robot
-comment0.text=\n\ La\ clase\ Robot\ representa\ un\ robot\ dentro\ de\ la\ simulaci\u00F3n\ Silk\ Road.\n\ El\ robot\ con\ mayor\ ganancia\ parpadea\ para\ destacarse\ visualmente.\n
-comment1.params=location
-comment1.target=Robot(int)
-comment1.text=\n\ Constructor\ que\ crea\ un\ robot\ en\ una\ ubicaci\u00F3n\ inicial\ espec\u00EDfica.\n\n\ @param\ location\ posici\u00F3n\ inicial\ del\ robot\n
+comment0.text=\n\ La\ clase\ Robot\ representa\ un\ robot\ dentro\ de\ la\ simulaci\u00F3n\ Silk\ Road.\n\ El\ robot\ con\ mayor\ ganancia\ parpadea\ para\ destacarse\ visualmente.\n\n\ @author\ Daniel\ Ahumada\ y\ Juan\ Neira\n\ @version\ ciclo\ 3\n
+comment1.params=road\ location
+comment1.target=Robot(Road,\ int)
+comment1.text=\n\ Constructor\ que\ crea\ un\ robot\ en\ una\ ubicaci\u00F3n\ inicial\ espec\u00EDfica.\n\n\ @param\ road\ la\ carretera\n\ @param\ location\ posici\u00F3n\ inicial\ del\ robot\n
 comment10.params=
 comment10.target=java.util.List\ getProfits()
 comment11.params=

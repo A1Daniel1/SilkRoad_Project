@@ -1,10 +1,7 @@
-import java.awt.Color;
-import java.util.Random;
-import java.util.Arrays;
 
 /**
  * La clase {@code Store} representa una tienda dentro de la simulación de Silk Road.
- * 
+ *
  * Cada tienda tiene:
  * <ul>
  *   <li>Una ubicación en la carretera</li>
@@ -12,34 +9,43 @@ import java.util.Arrays;
  *   <li>Una cantidad actual de tenges</li>
  *   <li>Una representación visual (rectángulo de color)</li>
  * </ul>
- * 
+ *
  * El color de la tienda se asigna de forma cíclica a partir de una lista predefinida.
  * Las tiendas desocupadas lucen diferentes a las que tienen mercancía.
+ *
+ * @author Daniel Ahumada y Juan Neira
+ * @version ciclo 3
  */
 public class Store {
     private int location;
     private int initialTenges;
     private int currentTenges;
     private Rectangle visualRepresentation;
-    private static final String[] COLORS = {"red", "blue", "green", "yellow", "magenta", "orange"};
-    private static int colorIndex = 0; 
+    private static final String[] COLORS = {"purple", "cyan", "pink", "brown", "navy", "lime"};
+    private static int colorIndex = 0;
     private int timesEmptied;
     private String originalColor;
+    private int cellX;
+    private int cellY;
 
     /**
      * Constructor que crea una nueva tienda.
      *
-     * @param location posición horizontal de la tienda en la carretera
+     * @param road la carretera
+     * @param location posición de la tienda en la carretera
      * @param tenges cantidad inicial de tenges
      */
-    public Store(int location, int tenges) {
+    public Store(Road road, int location, int tenges) {
         this.location = location;
         this.initialTenges = tenges;
         this.currentTenges = tenges;
         this.visualRepresentation = new Rectangle();
         this.visualRepresentation.changeSize(30, 30);
-        this.visualRepresentation.moveHorizontal(location); 
-        this.visualRepresentation.moveVertical(50);
+        this.cellX = road.getX(location);
+        this.cellY = road.getY(location);
+        int x = cellX + 5; // center 30x30 in 40x40 cell, so +5 for left
+        int y = cellY + 5;
+        this.visualRepresentation.setPosition(x, y);
         this.timesEmptied = 0;
         assignColor();
     }
@@ -99,15 +105,23 @@ public class Store {
     /**
      * Actualiza la apariencia de la tienda según su estado.
      * Las tiendas vacías se ven grises y más pequeñas.
+     * Las tiendas con diferentes cantidades de tenges tienen diferentes tamaños.
      */
     public void updateAppearance() {
+        int size;
         if (currentTenges == 0) {
             visualRepresentation.changeColor("grey");
-            visualRepresentation.changeSize(20, 20);
+            size = 20;
         } else {
             visualRepresentation.changeColor(originalColor);
-            visualRepresentation.changeSize(30, 30);
+            // Tamaño proporcional a los tenges actuales, entre 20 y 30
+            size = 20 + (currentTenges * 10 / initialTenges);
+            if (size > 30) size = 30;
         }
+        visualRepresentation.changeSize(size, size);
+        // Ajustar posición para centrar en la celda 40x40
+        int offset = (40 - size) / 2; // offset desde esquina de celda
+        visualRepresentation.setPosition(cellX + offset, cellY + offset);
     }
 
     /**

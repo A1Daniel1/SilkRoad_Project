@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=SilkRoadContest
+comment0.text=\n\ La\ clase\ SilkRoadContest\ simula\ y\ resuelve\ el\ problema\ de\ la\ marat\u00F3n\ de\ robots\ en\ la\ ruta\ de\ la\ seda.\n\ Basada\ en\ SilkRoad,\ proporciona\ m\u00E9todos\ para\ calcular\ resultados\ \u00F3ptimos\ y\ simular\ visualmente.\n\n\ @author\ Daniel\ Ahumada\ y\ Juan\ Neira\n\ @version\ ciclo\ 3\n
+comment1.params=length\ input
+comment1.target=SilkRoadContest(int,\ int[][])
+comment1.text=\n\ Constructor\ que\ crea\ una\ nueva\ simulaci\u00F3n\ Silk\ Road\ Contest.\n\n\ @param\ length\ longitud\ de\ la\ carretera\n\ @param\ input\ matriz\ con\ las\ instrucciones\ iniciales\n
+comment2.params=days
+comment2.target=int\ solve(int)
+comment2.text=\n\ Calcula\ y\ devuelve\ el\ resultado\ \u00F3ptimo\ de\ la\ simulaci\u00F3n\ sin\ mostrarla\ visualmente.\n\n\ @param\ days\ n\u00FAmero\ de\ d\u00EDas\ a\ simular\n\ @return\ ganancia\ total\ \u00F3ptima\n
+comment3.params=days\ slow
+comment3.target=void\ simulate(int,\ boolean)
+comment3.text=\n\ Ejecuta\ la\ simulaci\u00F3n\ visualmente,\ mostrando\ d\u00EDa\ a\ d\u00EDa\ y\ paso\ a\ paso.\n\n\ @param\ days\ n\u00FAmero\ de\ d\u00EDas\ a\ simular\n\ @param\ slow\ true\ para\ animaci\u00F3n\ lenta\ y\ detallada,\ false\ para\ r\u00E1pida\n
+comment4.params=
+comment4.target=void\ resetSimulation()
+comment4.text=\n\ Reinicia\ la\ simulaci\u00F3n\ al\ estado\ inicial.\n
+numComments=5

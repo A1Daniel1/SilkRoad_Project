@@ -10,16 +10,16 @@ public class SilkRoadC2Test {
     
     @BeforeEach
     public void setUp() {
-        silkRoad = new SilkRoad(500);
+        silkRoad = new SilkRoad(100);
     }
     
     @Test
     public void accordingANShouldCreateRoadAndMoveRobots() {
         int[][] input = {
-            {2, 100, 150},
-            {2, 300, 200},
-            {1, 50},
-            {1, 400}
+            {2, 10, 150},
+            {2, 30, 200},
+            {1, 5},
+            {1, 40}
         };
         
         silkRoad.createFromInput(input);
@@ -34,10 +34,10 @@ public class SilkRoadC2Test {
     @Test
     public void accordingANShouldConsultStoreAndRobotData() {
         int[][] input = {
-            {2, 80, 100},
-            {2, 250, 150},
-            {1, 50},
-            {1, 300}
+            {2, 8, 100},
+            {2, 25, 150},
+            {1, 5},
+            {1, 30}
         };
         
         silkRoad.createFromInput(input);
