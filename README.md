@@ -19,6 +19,8 @@ El simulador puede funcionar en modo **visible** (usando `shapes`) o en modo **i
 5. Reiniciar la ruta de seda.
 6. Hacer visible o invisible el simulador.
 7. Finalizar el simulador.
+8. Simular problema de la maraton
+9. Solucionar problema de la maraton
 
 ## Tecnologías
 - **Java (BlueJ)**  
