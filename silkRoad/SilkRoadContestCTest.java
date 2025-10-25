@@ -21,6 +21,7 @@ public class SilkRoadContestCTest {
         contest = new SilkRoadContest(50, input);
     }
 
+
     @Test
     public void testSolveFewDays() {
         int profit = contest.solve(3);

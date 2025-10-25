@@ -1,11 +1,11 @@
 #BlueJ class context
 comment0.target=Road
-comment0.text=\n\ La\ clase\ {@code\ Road}\ representa\ la\ carretera\ de\ la\ Ruta\ de\ la\ Seda.\n\n\ Dibuja\ la\ carretera\ como\ un\ conjunto\ de\ celdas\ de\ 40x40\ en\ forma\ de\ espiral.\n\n\ @author\ Daniel\n\ @version\ 2025-2\n
+comment0.text=\r\n\ La\ clase\ {@code\ Road}\ representa\ la\ carretera\ de\ la\ Ruta\ de\ la\ Seda.\r\n\r\n\ Dibuja\ la\ carretera\ como\ un\ conjunto\ de\ celdas\ de\ 40x40\ en\ forma\ de\ espiral.\r\n\r\n\ @author\ Daniel\r\n\ @version\ 2025-2\r\n
 comment1.params=n
 comment1.target=Road(int)
 comment2.params=n
 comment2.target=void\ drawRoad(int)
-comment2.text=\n\ Dibuja\ el\ camino\ con\ n\ celdas\ en\ espiral\n
+comment2.text=\r\n\ Dibuja\ el\ camino\ con\ n\ celdas\ en\ espiral\r\n
 comment3.params=
 comment3.target=void\ makeVisible()
 comment3.text=Hace\ visible\ la\ carretera
@@ -17,8 +17,8 @@ comment5.target=void\ clear()
 comment5.text=Limpia\ las\ celdas
 comment6.params=location
 comment6.target=int\ getX(int)
-comment6.text=\n\ Obtiene\ la\ posici\u00F3n\ x\ de\ la\ celda\ en\ la\ ubicaci\u00F3n\ dada.\n
+comment6.text=\r\n\ Obtiene\ la\ posici\u00F3n\ x\ de\ la\ celda\ en\ la\ ubicaci\u00F3n\ dada.\r\n
 comment7.params=location
 comment7.target=int\ getY(int)
-comment7.text=\n\ Obtiene\ la\ posici\u00F3n\ y\ de\ la\ celda\ en\ la\ ubicaci\u00F3n\ dada.\n
+comment7.text=\r\n\ Obtiene\ la\ posici\u00F3n\ y\ de\ la\ celda\ en\ la\ ubicaci\u00F3n\ dada.\r\n
 numComments=8

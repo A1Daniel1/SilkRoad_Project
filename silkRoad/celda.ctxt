@@ -1,13 +1,13 @@
 #BlueJ class context
 comment0.target=celda
-comment0.text=\n\ A\ cell\ that\ can\ be\ manipulated\ and\ that\ draws\ itself\ on\ a\ canvas\ with\ black\ borders\ and\ white\ background.\n\n\ @author\ Daniel\ Ahumada\ y\ Juan\ Neira\n\ @version\ ciclo\ 3\n
+comment0.text=\r\n\ A\ cell\ that\ can\ be\ manipulated\ and\ that\ draws\ itself\ on\ a\ canvas\ with\ black\ borders\ and\ white\ background.\r\n\r\n\ @author\ Daniel\ Ahumada\ y\ Juan\ Neira\r\n\ @version\ ciclo\ 3\r\n
 comment1.params=
 comment1.target=celda()
-comment1.text=\n\ Constructor\ for\ objects\ of\ class\ celda\n
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ celda\r\n
 comment2.params=newWidth\ newHeight
 comment2.target=void\ changeSize(int,\ int)
-comment2.text=\n\ Change\ the\ size\ to\ the\ new\ size\n\ @param\ newWidth\ the\ new\ width\ in\ pixels.\ newWidth\ must\ be\ >\=0.\n\ @param\ newHeight\ the\ new\ height\ in\ pixels.\ newHeight\ must\ be\ >\=0.\n
+comment2.text=\r\n\ Change\ the\ size\ to\ the\ new\ size\r\n\ @param\ newWidth\ the\ new\ width\ in\ pixels.\ newWidth\ must\ be\ >\=0.\r\n\ @param\ newHeight\ the\ new\ height\ in\ pixels.\ newHeight\ must\ be\ >\=0.\r\n
 comment3.params=
 comment3.target=void\ draw()
-comment3.text=\n\ Draw\ the\ cell\ with\ current\ specifications\ on\ screen.\n
+comment3.text=\r\n\ Draw\ the\ cell\ with\ current\ specifications\ on\ screen.\r\n
 numComments=4

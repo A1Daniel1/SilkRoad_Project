@@ -12,18 +12,17 @@ import javax.swing.Timer;
  * @version ciclo 3
  */
 public class Robot {
-    private int initialLocation;
-    private int currentLocation;
-    private Circle visualRepresentation;
-    private Road road;
-    private static final String[] COLORS = {"red", "blue", "green", "yellow", "magenta", "black", "orange", "pink", "cyan", "purple"};
-    private static int colorIndex = 0;
-    private List<Integer> profits;
-    private String originalColor;
-    private boolean isBlinking;
-    private Timer blinkTimer;
-    private boolean isVisible;
-    private int blinkCount;
+    protected int initialLocation;
+    protected int currentLocation;
+    protected Circle visualRepresentation;
+    protected Road road;
+    protected List<Integer> profits;
+    protected String originalColor;
+    protected boolean isBlinking;
+    protected Timer blinkTimer;
+    protected boolean isVisible;
+    protected int blinkCount;
+    protected String type; // "normal", "neverback", "tender"
 
     /**
      * Constructor que crea un robot en una ubicación inicial específica.
@@ -37,13 +36,17 @@ public class Robot {
         this.currentLocation = location;
         this.visualRepresentation = new Circle();
         this.visualRepresentation.changeSize(20);
-        int x = road.getX(location) + 20;
-        int y = road.getY(location) + 20;
-        this.visualRepresentation.setPosition(x, y);
+        
+        // Validar que la ubicación existe en el camino
+        int x = road.getX(location);
+        int y = road.getY(location);
+        
+        this.visualRepresentation.setPosition(x + 20, y + 20);
         this.profits = new ArrayList<>();
         this.isBlinking = false;
         this.isVisible = false;
         this.blinkCount = 0;
+        this.type = "normal";
         assignColor();
         setupBlinkTimer();
     }
@@ -60,12 +63,30 @@ public class Robot {
         this.currentLocation = location;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * Verifica si el robot puede moverse a una ubicación.
+     * Puede ser sobreescrito por subclases.
+     *
+     * @param targetLocation ubicación objetivo
+     * @return true si el movimiento es válido
+     */
+    public boolean canMoveTo(int targetLocation) {
+        return true; // Los robots normales pueden moverse a cualquier lado
+    }
+
     /**
      * Mueve el robot a una ubicación objetivo.
      *
      * @param targetLocation nueva ubicación
      */
     public void moveTo(int targetLocation) {
+        if (!canMoveTo(targetLocation)) {
+            return;
+        }
         int targetX = road.getX(targetLocation) + 20;
         int targetY = road.getY(targetLocation) + 20;
         visualRepresentation.setPosition(targetX, targetY);
@@ -114,6 +135,17 @@ public class Robot {
     }
 
     /**
+     * Recoge tenges de una tienda.
+     * Puede ser sobreescrito por subclases para comportamiento diferente.
+     *
+     * @param store la tienda de la que recoger
+     * @return cantidad de tenges recolectados
+     */
+    public int collectFrom(Store store) {
+        return store.empty(this);
+    }
+
+    /**
      * Inicia el efecto de parpadeo para el robot con mayor ganancia.
      * El robot parpadeará 6 veces y luego se detendrá.
      */
@@ -159,19 +191,36 @@ public class Robot {
     }
 
     /**
-     * Asigna un color al robot de forma cíclica.
+     * Asigna un color al robot dependiendo de su tipo.
      */
-    private void assignColor() {
-        originalColor = COLORS[colorIndex];
-        visualRepresentation.changeColor(originalColor);
-        colorIndex = (colorIndex + 1) % COLORS.length; 
+    protected void assignColor() {
+        String newColor;
+
+        switch (type) {
+            case "neverback":
+                newColor = "red";
+                break;
+            case "tender":
+                newColor = "yellow";
+                break;
+            case "illbeback":
+                newColor = "magenta";
+                break;
+            default:
+                newColor = "blue";
+                break;
+        }
+
+        originalColor = newColor;
+        visualRepresentation.changeColor(newColor);
     }
+
 
     /**
      * Configura el timer para el efecto de parpadeo.
      * El robot parpadea 6 veces (12 cambios de color) y luego se detiene.
      */
-    private void setupBlinkTimer() {
+    protected void setupBlinkTimer() {
         blinkTimer = new Timer(400, new ActionListener() {
             private boolean showOriginal = true;
             
