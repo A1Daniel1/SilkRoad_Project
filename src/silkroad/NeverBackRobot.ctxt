@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=NeverBackRobot
+comment0.text=\n\ Robot\ que\ nunca\ se\ devuelve.\ Solo\ puede\ moverse\ hacia\ adelante.\n\ \n\ @author\ Daniel\ Ahumada\ y\ Juan\ Neira\n\ @version\ ciclo\ 3\n
+comment1.params=road\ location
+comment1.target=NeverBackRobot(Road,\ int)
+comment1.text=\n\ Constructor\ que\ crea\ un\ robot\ neverback.\n\n\ @param\ road\ la\ carretera\n\ @param\ location\ posici\u00F3n\ inicial\ del\ robot\n
+comment2.params=targetLocation
+comment2.target=boolean\ canMoveTo(int)
+comment2.text=\n\ Verifica\ si\ el\ robot\ puede\ moverse\ a\ una\ ubicaci\u00F3n.\n\ Solo\ permite\ movimientos\ hacia\ adelante\ (posiciones\ mayores).\n\n\ @param\ targetLocation\ ubicaci\u00F3n\ objetivo\n\ @return\ true\ si\ el\ movimiento\ es\ hacia\ adelante\n
+numComments=3
