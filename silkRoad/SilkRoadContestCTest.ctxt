@@ -1,9 +1,0 @@
-#BlueJ class context
-comment0.target=SilkRoadContestCTest
-comment1.params=
-comment1.target=void\ setUp()
-comment2.params=
-comment2.target=void\ testSolveFewDays()
-comment3.params=
-comment3.target=void\ testSolveManyDays()
-numComments=4
