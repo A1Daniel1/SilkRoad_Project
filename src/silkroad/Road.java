@@ -87,7 +87,7 @@ public class Road {
      */
     public int getX(int location) {
         if (location >= 0 && location < cells.size()) {
-            return cells.get(location).xPosition;
+            return cells.get(location).getXPosition();
         }
         return 0;
     }
@@ -97,7 +97,7 @@ public class Road {
      */
     public int getY(int location) {
         if (location >= 0 && location < cells.size()) {
-            return cells.get(location)   .yPosition;
+            return cells.get(location).getYPosition();
         }
         return 0;
     }

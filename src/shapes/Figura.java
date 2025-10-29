@@ -1,166 +1,126 @@
 package shapes;
 import silkroad.*;
+
 /**
- * Abstract base class for shapes to avoid code repetition.
+ * Clase abstracta base para las figuras.
+ * Centraliza comportamiento común y evita repetición de código.
  *
  * @author Daniel Ahumada y Juan Neira
- * @version ciclo 3
+ * @version ciclo 4
  */
-public abstract class Figura
-{
-    public int xPosition;
-    public int yPosition;
-    public String color;
-    public boolean isVisible;
+public abstract class Figura {
+
+    // 🔒 Encapsulamiento correcto: accesible en subclases, no fuera del paquete
+    protected int xPosition;
+    protected int yPosition;
+    protected String color;
+    protected boolean isVisible;
+
     /**
-     * Constructor for objects of class Figura
+     * Constructor por defecto
      */
-    public Figura()
-    {
+    public Figura() {
         xPosition = 0;
         yPosition = 0;
         color = "blue";
         isVisible = false;
     }
 
-    /**
-     * Make this figure visible. If it was already visible, do nothing.
-     */
-    public void makeVisible(){
+    /** Hace visible la figura. */
+    public void makeVisible() {
         isVisible = true;
         draw();
     }
 
-    /**
-     * Make this figure invisible. If it was already invisible, do nothing.
-     */
-    public void makeInvisible(){
+    /** Hace invisible la figura. */
+    public void makeInvisible() {
         erase();
         isVisible = false;
     }
 
-    /**
-     * Move the figure a few pixels to the right.
-     */
-    public void moveRight(){
+    /** Mueve la figura hacia la derecha. */
+    public void moveRight() {
         moveHorizontal(20);
     }
 
-    /**
-     * Move the figure a few pixels to the left.
-     */
-    public void moveLeft(){
+    /** Mueve la figura hacia la izquierda. */
+    public void moveLeft() {
         moveHorizontal(-20);
     }
 
-    /**
-     * Move the figure a few pixels up.
-     */
-    public void moveUp(){
+    /** Mueve la figura hacia arriba. */
+    public void moveUp() {
         moveVertical(-20);
     }
 
-    /**
-     * Move the figure a few pixels down.
-     */
-    public void moveDown(){
+    /** Mueve la figura hacia abajo. */
+    public void moveDown() {
         moveVertical(20);
     }
 
-    /**
-     * Move the figure horizontally.
-     * @param distance the desired distance in pixels
-     */
-    public void moveHorizontal(int distance){
+    /** Mueve la figura horizontalmente. */
+    public void moveHorizontal(int distance) {
         erase();
         xPosition += distance;
         draw();
     }
 
-    /**
-     * Move the figure vertically.
-     * @param distance the desired distance in pixels
-     */
-    public void moveVertical(int distance){
+    /** Mueve la figura verticalmente. */
+    public void moveVertical(int distance) {
         erase();
         yPosition += distance;
         draw();
     }
 
-    /**
-     * Slowly move the figure horizontally.
-     * @param distance the desired distance in pixels
-     */
-    public void slowMoveHorizontal(int distance){
-        int delta;
+    /** Mueve la figura lentamente en dirección horizontal. */
+    public void slowMoveHorizontal(int distance) {
+        int delta = (distance < 0) ? -1 : 1;
+        distance = Math.abs(distance);
 
-        if(distance < 0) {
-            delta = -1;
-            distance = -distance;
-        } else {
-            delta = 1;
-        }
-
-        for(int i = 0; i < distance; i++){
+        for (int i = 0; i < distance; i++) {
             xPosition += delta;
             draw();
         }
     }
 
-    /**
-     * Slowly move the figure vertically.
-     * @param distance the desired distance in pixels
-     */
-    public void slowMoveVertical(int distance){
-        int delta;
+    /** Mueve la figura lentamente en dirección vertical. */
+    public void slowMoveVertical(int distance) {
+        int delta = (distance < 0) ? -1 : 1;
+        distance = Math.abs(distance);
 
-        if(distance < 0) {
-            delta = -1;
-            distance = -distance;
-        } else {
-            delta = 1;
-        }
-
-        for(int i = 0; i < distance; i++){
+        for (int i = 0; i < distance; i++) {
             yPosition += delta;
             draw();
         }
     }
 
-    /**
-     * Change the color.
-     * @param newColor the new color. Valid colors are "red", "yellow", "blue", "green",
-     * "magenta", "black", and "white".
-     */
-    public void changeColor(String newColor){
+    /** Cambia el color de la figura. */
+    public void changeColor(String newColor) {
         color = newColor;
         draw();
     }
 
-    /**
-     * Set the position of the figure.
-     * @param x the new x position
-     * @param y the new y position
-     */
-    public void setPosition(int x, int y){
+    /** Establece la posición de la figura. */
+    public void setPosition(int x, int y) {
         erase();
         xPosition = x;
         yPosition = y;
         draw();
     }
 
-    /**
-     * Draw the figure with current specifications on screen.
-     */
+    /** Dibuja la figura (debe implementarse en cada subclase). */
     public abstract void draw();
 
-    /**
-     * Erase the figure on screen.
-     */
-    public void erase(){
-        if(isVisible) {
+    /** Borra la figura del canvas. */
+    public void erase() {
+        if (isVisible) {
             Canvas canvas = Canvas.getCanvas();
             canvas.erase(this);
         }
     }
+
+    public int getXPosition() { return xPosition; }
+    public int getYPosition() { return yPosition; }
+    public String getColor() { return color; }
+    public boolean isVisible() { return isVisible; }
 }
