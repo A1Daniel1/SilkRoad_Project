@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=FighterStore
+comment0.text=\n\ Tienda\ luchadora\ que\ solo\ permite\ ser\ vaciada\ por\ robots\ con\ m\u00E1s\ dinero\ que\ ella.\n\ \n\ @author\ Daniel\ Ahumada\ y\ Juan\ Neira\n\ @version\ ciclo\ 3\n
+comment1.params=road\ location\ tenges
+comment1.target=FighterStore(Road,\ int,\ int)
+comment1.text=\n\ Constructor\ que\ crea\ una\ tienda\ fighter.\n\n\ @param\ road\ la\ carretera\n\ @param\ location\ posici\u00F3n\ de\ la\ tienda\ en\ la\ carretera\n\ @param\ tenges\ cantidad\ inicial\ de\ tenges\n
+comment2.params=robot
+comment2.target=boolean\ canBeEmptiedBy(Robot)
+comment2.text=\n\ Verifica\ si\ un\ robot\ puede\ vaciar\ esta\ tienda.\n\ Solo\ robots\ con\ m\u00E1s\ dinero\ (ganancia\ total)\ que\ los\ tenges\ actuales\ pueden\ vaciarla.\n\n\ @param\ robot\ el\ robot\ que\ intenta\ vaciar\ la\ tienda\n\ @return\ true\ si\ el\ robot\ tiene\ m\u00E1s\ dinero\ que\ la\ tienda\n
+numComments=3

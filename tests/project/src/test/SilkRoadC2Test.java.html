@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>SilkRoadC2Test.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">project (8/11/2025 9:32:13 p. m.)</a> &gt; <a href="../../index.html" class="el_group">project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">test</a> &gt; <span class="el_source">SilkRoadC2Test.java</span></div><h1>SilkRoadC2Test.java</h1><pre class="source lang-java linenums">package test;
+import shapes.*;
+import silkroad.SilkRoad;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+
+<span class="fc" id="L11">public class SilkRoadC2Test {</span>
+    
+    private SilkRoad silkRoad;
+    
+    @BeforeEach
+    public void setUp() {
+<span class="fc" id="L17">        silkRoad = new SilkRoad(100);</span>
+<span class="fc" id="L18">    }</span>
+    
+    @Test
+    public void accordingANShouldCreateRoadAndMoveRobots() {
+<span class="nc" id="L22">        int[][] input = {</span>
+<span class="nc" id="L23">            {2, 10, 150},</span>
+<span class="nc" id="L24">            {2, 30, 200},</span>
+<span class="nc" id="L25">            {1, 5},</span>
+<span class="nc" id="L26">            {1, 40}</span>
+        };
+        
+<span class="nc" id="L29">        silkRoad.createFromInput(input);</span>
+<span class="nc" id="L30">        int beforeProfit = silkRoad.profit();</span>
+<span class="nc" id="L31">        silkRoad.autoMoveRobots();</span>
+        
+<span class="nc" id="L33">        assertEquals(2, silkRoad.stores().length);</span>
+<span class="nc" id="L34">        assertEquals(2, silkRoad.robots().length);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        assertTrue(silkRoad.profit() &gt; beforeProfit);</span>
+<span class="nc" id="L36">    }</span>
+    
+    @Test
+    public void accordingANShouldConsultStoreAndRobotData() {
+<span class="fc" id="L40">        int[][] input = {</span>
+<span class="fc" id="L41">            {2, 8, 100},</span>
+<span class="fc" id="L42">            {2, 25, 150},</span>
+<span class="fc" id="L43">            {1, 5},</span>
+<span class="fc" id="L44">            {1, 30}</span>
+        };
+        
+<span class="fc" id="L47">        silkRoad.createFromInput(input);</span>
+<span class="fc" id="L48">        silkRoad.autoMoveRobots();</span>
+<span class="fc" id="L49">        silkRoad.resupplyStores();</span>
+<span class="fc" id="L50">        silkRoad.autoMoveRobots();</span>
+        
+<span class="fc" id="L52">        int emptyTimes = silkRoad.consultStoreEmptyTimes(80);</span>
+<span class="fc" id="L53">        List&lt;Integer&gt; profits = silkRoad.consultRobotProfits(50);</span>
+<span class="fc" id="L54">        int totalProfit = silkRoad.consultRobotTotalProfit(50);</span>
+        
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        assertTrue(emptyTimes &gt;= 0);</span>
+<span class="nc" id="L57">        assertNotNull(profits);</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        assertTrue(totalProfit &gt;= 0);</span>
+<span class="nc" id="L59">        assertEquals(-1, silkRoad.consultStoreEmptyTimes(999));</span>
+<span class="nc" id="L60">        assertNull(silkRoad.consultRobotProfits(999));</span>
+<span class="nc" id="L61">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span>project (8/11/2025 9:32:13 p. m.)</div></body></html>

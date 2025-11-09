@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>TenderRobot.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">project (8/11/2025 9:32:13 p. m.)</a> &gt; <a href="../../index.html" class="el_group">project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">silkroad</a> &gt; <span class="el_source">TenderRobot.java</span></div><h1>TenderRobot.java</h1><pre class="source lang-java linenums">package silkroad;
+import shapes.*;
+/**
+ * Robot tierno que solo toma la mitad del dinero de las tiendas que visita.
+ * 
+ * @author Daniel Ahumada y Juan Neira
+ * @version ciclo 3
+ */
+public class TenderRobot extends Robot {
+    
+    /**
+     * Constructor que crea un robot tender.
+     *
+     * @param road la carretera
+     * @param location posición inicial del robot
+     */
+    public TenderRobot(Road road, int location) {
+<span class="fc" id="L18">        super(road, location);</span>
+<span class="fc" id="L19">        this.type = &quot;tender&quot;;</span>
+<span class="fc" id="L20">        assignColor();</span>
+<span class="fc" id="L21">    }</span>
+    
+    /**
+     * Recoge tenges de una tienda.
+     * Solo toma la mitad de los tenges disponibles.
+     *
+     * @param store la tienda de la que recoger
+     * @return cantidad de tenges recolectados (la mitad)
+     */
+    @Override
+    public int collectFrom(Store store) {
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (!store.canBeEmptiedBy(this)) {</span>
+<span class="nc" id="L33">            return 0;</span>
+        }
+        
+<span class="fc" id="L36">        int currentTenges = store.getCurrentTenges();</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (currentTenges &lt;= 0) {</span>
+<span class="nc" id="L38">            return 0;</span>
+        }
+        
+<span class="fc" id="L41">        int halfAmount = currentTenges / 2;</span>
+<span class="fc" id="L42">        store.setCurrentTenges(currentTenges - halfAmount);</span>
+        
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (halfAmount &gt; 0) {</span>
+            // Solo incrementar el contador si realmente tomó algo
+<span class="fc" id="L46">            store.timesEmptied++;</span>
+        }
+        
+<span class="fc" id="L49">        return halfAmount;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span>project (8/11/2025 9:32:13 p. m.)</div></body></html>

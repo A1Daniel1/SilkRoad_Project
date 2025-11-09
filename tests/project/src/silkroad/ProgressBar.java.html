@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ProgressBar.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">project (8/11/2025 9:32:13 p. m.)</a> &gt; <a href="../../index.html" class="el_group">project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">silkroad</a> &gt; <span class="el_source">ProgressBar.java</span></div><h1>ProgressBar.java</h1><pre class="source lang-java linenums">package silkroad;
+import shapes.*;
+/**
+ * La clase {@code ProgressBar} representa una barra de progreso visual
+ * que muestra el estado actual de la simulación Silk Road.
+ * 
+ * @author Daniel
+ * @version 2025-2
+ */
+public class ProgressBar {
+    private Rectangle background;
+    private Rectangle progress;
+    private Rectangle border;
+    private int maxValue;
+    private int currentValue;
+    private int width;
+    private int height;
+    private int xPosition;
+    private int yPosition;
+    private boolean isVisible;
+
+    /**
+     * Constructor que crea una nueva barra de progreso visible automáticamente.
+     *
+     * @param maxValue valor máximo de la barra
+     * @param xPosition posición horizontal
+     * @param yPosition posición vertical
+     * @param width ancho de la barra
+     * @param height alto de la barra
+     */
+<span class="fc" id="L31">    public ProgressBar(int maxValue, int xPosition, int yPosition, int width, int height) {</span>
+<span class="fc" id="L32">        this.maxValue = maxValue;</span>
+<span class="fc" id="L33">        this.currentValue = 0;</span>
+<span class="fc" id="L34">        this.xPosition = xPosition;</span>
+<span class="fc" id="L35">        this.yPosition = yPosition;</span>
+<span class="fc" id="L36">        this.width = width;</span>
+<span class="fc" id="L37">        this.height = height;</span>
+<span class="fc" id="L38">        this.isVisible = false;</span>
+        
+<span class="fc" id="L40">        this.border = new Rectangle();</span>
+<span class="fc" id="L41">        this.border.changeSize(height + 4, width + 4);</span>
+<span class="fc" id="L42">        this.border.moveHorizontal(xPosition - 2);</span>
+<span class="fc" id="L43">        this.border.moveVertical(yPosition - 2);</span>
+<span class="fc" id="L44">        this.border.changeColor(&quot;black&quot;);</span>
+  
+<span class="fc" id="L46">        this.background = new Rectangle();</span>
+<span class="fc" id="L47">        this.background.changeSize(height, width);</span>
+<span class="fc" id="L48">        this.background.moveHorizontal(xPosition);</span>
+<span class="fc" id="L49">        this.background.moveVertical(yPosition);</span>
+<span class="fc" id="L50">        this.background.changeColor(&quot;lightGray&quot;);</span>
+   
+<span class="fc" id="L52">        this.progress = new Rectangle();</span>
+<span class="fc" id="L53">        this.progress.changeSize(height, 0); </span>
+<span class="fc" id="L54">        this.progress.moveHorizontal(xPosition);</span>
+<span class="fc" id="L55">        this.progress.moveVertical(yPosition);</span>
+<span class="fc" id="L56">        this.progress.changeColor(&quot;blue&quot;);</span>
+
+<span class="fc" id="L58">        makeVisible();</span>
+<span class="fc" id="L59">    }</span>
+
+    /**
+     * Establece el valor actual de la barra de progreso.
+     *
+     * @param value nuevo valor (debe estar entre 0 y maxValue)
+     */
+    public void setValue(int value) {
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (value &lt; 0) value = 0;</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (value &gt; maxValue) value = maxValue;</span>
+        
+<span class="fc" id="L70">        this.currentValue = value;</span>
+<span class="fc" id="L71">        updateProgress();</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Incrementa el valor actual de la barra de progreso.
+     *
+     * @param increment cantidad a incrementar
+     */
+    public void increment(int increment) {
+<span class="nc" id="L80">        setValue(currentValue + increment);</span>
+<span class="nc" id="L81">    }</span>
+
+    /**
+     * Establece el valor máximo de la barra de progreso.
+     *
+     * @param maxValue nuevo valor máximo
+     */
+    public void setMaxValue(int maxValue) {
+<span class="nc" id="L89">        this.maxValue = maxValue;</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        if (currentValue &gt; maxValue) {</span>
+<span class="nc" id="L91">            currentValue = maxValue;</span>
+        }
+<span class="nc" id="L93">        updateProgress();</span>
+<span class="nc" id="L94">    }</span>
+
+    /**
+     * Reinicia la barra de progreso a cero.
+     */
+    public void reset() {
+<span class="fc" id="L100">        this.currentValue = 0;</span>
+<span class="fc" id="L101">        updateProgress();</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Hace visible la barra de progreso.
+     */
+    public void makeVisible() {
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (!isVisible) {</span>
+<span class="fc" id="L109">            border.makeVisible();</span>
+<span class="fc" id="L110">            background.makeVisible();</span>
+<span class="fc" id="L111">            progress.makeVisible();</span>
+<span class="fc" id="L112">            isVisible = true;</span>
+        }
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * Hace invisible la barra de progreso.
+     */
+    public void makeInvisible() {
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        if (isVisible) {</span>
+<span class="nc" id="L121">            border.makeInvisible();</span>
+<span class="nc" id="L122">            background.makeInvisible();</span>
+<span class="nc" id="L123">            progress.makeInvisible();</span>
+<span class="nc" id="L124">            isVisible = false;</span>
+        }
+<span class="nc" id="L126">    }</span>
+
+    /**
+     * Cambia el color de la barra de progreso.
+     *
+     * @param color nuevo color
+     */
+    public void changeColor(String color) {
+<span class="nc" id="L134">        progress.changeColor(color);</span>
+<span class="nc" id="L135">    }</span>
+
+    /**
+     * Obtiene el valor actual de la barra de progreso.
+     *
+     * @return valor actual
+     */
+    public int getValue() {
+<span class="nc" id="L143">        return currentValue;</span>
+    }
+
+    /**
+     * Obtiene el valor máximo de la barra de progreso.
+     *
+     * @return valor máximo
+     */
+    public int getMaxValue() {
+<span class="nc" id="L152">        return maxValue;</span>
+    }
+
+    /**
+     * Obtiene el porcentaje de progreso actual.
+     *
+     * @return porcentaje (0-100)
+     */
+    public int getPercentage() {
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if (maxValue == 0) return 0;</span>
+<span class="fc" id="L162">        return (currentValue * 100) / maxValue;</span>
+    }
+
+    /**
+     * Actualiza la apariencia visual de la barra de progreso.
+     */
+    private void updateProgress() {
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (maxValue &gt; 0) {</span>
+<span class="fc" id="L170">            int progressWidth = (currentValue * width) / maxValue;</span>
+<span class="fc" id="L171">            progress.changeSize(height, progressWidth);</span>
+
+<span class="fc bfc" id="L173" title="All 2 branches covered.">            if (getPercentage() &gt;= 100) {</span>
+<span class="fc" id="L174">                progress.changeColor(&quot;green&quot;);</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">            } else if (getPercentage() &gt;= 75) {</span>
+<span class="fc" id="L176">                progress.changeColor(&quot;blue&quot;);</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">            } else if (getPercentage() &gt;= 50) {</span>
+<span class="fc" id="L178">                progress.changeColor(&quot;yellow&quot;);</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            } else if (getPercentage() &gt;= 25) {</span>
+<span class="fc" id="L180">                progress.changeColor(&quot;orange&quot;);</span>
+<span class="fc" id="L181">            } else {</span>
+<span class="fc" id="L182">                progress.changeColor(&quot;red&quot;);</span>
+            }
+        }
+<span class="fc" id="L185">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span>project (8/11/2025 9:32:13 p. m.)</div></body></html>

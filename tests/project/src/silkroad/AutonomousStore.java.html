@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>AutonomousStore.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">project (8/11/2025 9:32:13 p. m.)</a> &gt; <a href="../../index.html" class="el_group">project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">silkroad</a> &gt; <span class="el_source">AutonomousStore.java</span></div><h1>AutonomousStore.java</h1><pre class="source lang-java linenums">package silkroad;
+import shapes.*;
+import java.util.Random;
+
+/**
+ * Tienda autónoma que escoge su propia ubicación en lugar de que se la indiquen.
+ * 
+ * @author Daniel Ahumada y Juan Neira
+ * @version ciclo 3
+ */
+public class AutonomousStore extends Store {
+<span class="fc" id="L12">    private static Random random = new Random();</span>
+    
+    /**
+     * Constructor que crea una tienda autónoma.
+     * La ubicación proporcionada es ignorada y la tienda escoge su propia posición.
+     *
+     * @param road la carretera
+     * @param ignoredLocation ubicación sugerida (será ignorada)
+     * @param tenges cantidad inicial de tenges
+     * @param roadLength longitud de la carretera para escoger posición válida
+     */
+    public AutonomousStore(Road road, int ignoredLocation, int tenges, int roadLength) {
+<span class="fc" id="L24">        super(road, chooseLocation(roadLength), tenges);</span>
+<span class="fc" id="L25">        this.type = &quot;autonomous&quot;;</span>
+<span class="fc" id="L26">        updateAppearance();</span>
+<span class="fc" id="L27">    }</span>
+    
+    /**
+     * Escoge una ubicación aleatoria para la tienda.
+     *
+     * @param roadLength longitud máxima de la carretera
+     * @return ubicación escogida
+     */
+    private static int chooseLocation(int roadLength) {
+<span class="fc" id="L36">        return random.nextInt(roadLength + 1);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span>project (8/11/2025 9:32:13 p. m.)</div></body></html>

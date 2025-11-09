@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=AutonomousStore
+comment0.text=\n\ Tienda\ aut\u00F3noma\ que\ escoge\ su\ propia\ ubicaci\u00F3n\ en\ lugar\ de\ que\ se\ la\ indiquen.\n\ \n\ @author\ Daniel\ Ahumada\ y\ Juan\ Neira\n\ @version\ ciclo\ 3\n
+comment1.params=road\ ignoredLocation\ tenges\ roadLength
+comment1.target=AutonomousStore(Road,\ int,\ int,\ int)
+comment1.text=\n\ Constructor\ que\ crea\ una\ tienda\ aut\u00F3noma.\n\ La\ ubicaci\u00F3n\ proporcionada\ es\ ignorada\ y\ la\ tienda\ escoge\ su\ propia\ posici\u00F3n.\n\n\ @param\ road\ la\ carretera\n\ @param\ ignoredLocation\ ubicaci\u00F3n\ sugerida\ (ser\u00E1\ ignorada)\n\ @param\ tenges\ cantidad\ inicial\ de\ tenges\n\ @param\ roadLength\ longitud\ de\ la\ carretera\ para\ escoger\ posici\u00F3n\ v\u00E1lida\n
+comment2.params=roadLength
+comment2.target=int\ chooseLocation(int)
+comment2.text=\n\ Escoge\ una\ ubicaci\u00F3n\ aleatoria\ para\ la\ tienda.\n\n\ @param\ roadLength\ longitud\ m\u00E1xima\ de\ la\ carretera\n\ @return\ ubicaci\u00F3n\ escogida\n
+numComments=3

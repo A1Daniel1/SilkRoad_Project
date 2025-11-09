@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=IllBeBackRobot
+comment0.text=\n\ Robot\ que\ solo\ puede\ moverse\ en\ reversa\ (hacia\ atr\u00E1s).\n\ \n\ @author\ Daniel\ Ahumada\ y\ Juan\ Neira\n\ @version\ ciclo\ 3\n
+comment1.params=road\ location
+comment1.target=IllBeBackRobot(Road,\ int)
+comment1.text=\n\ Constructor\ que\ crea\ un\ robot\ illbeback.\n\n\ @param\ road\ la\ carretera\n\ @param\ location\ posici\u00F3n\ inicial\ del\ robot\n
+comment2.params=targetLocation
+comment2.target=boolean\ canMoveTo(int)
+comment2.text=\n\ Verifica\ si\ el\ robot\ puede\ moverse\ a\ una\ ubicaci\u00F3n.\n\ Solo\ permite\ movimientos\ hacia\ atr\u00E1s\ (posiciones\ menores).\n\n\ @param\ targetLocation\ ubicaci\u00F3n\ objetivo\n\ @return\ true\ si\ el\ movimiento\ es\ hacia\ atr\u00E1s\n
+numComments=3
