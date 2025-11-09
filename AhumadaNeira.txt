@@ -1,0 +1,38 @@
+Codigo Repositorio
+
+https://github.com/A1Daniel1/SilkRoad_Project.git
+
+1. ¿Cuáles fueron los mini-ciclos definidos? Justifíquenlos.
+
+eclipse - familiarizarnos con el IDE
+el informe dinamico/estatico inicial - revisar que trabajar
+correciones - trabajamos los puntos criticos de la parte de dominio
+
+2. ¿Cuál es el estado actual del proyecto en términos de mini-ciclos? ¿por qué?
+
+Se encuentran completos todos los miniciclos
+
+3. ¿Cuál fue el tiempo total invertido por cada uno de ustedes? (Horas/Hombre)
+
+Juan Neira - 10
+Daniel Ahumada - 10
+
+4. ¿Cuál consideran fue el mayor logro? ¿Por qué?
+
+Lograr aplicar lo visto en clase y que el proyecto corriera bien, porque de esa manera afianzamos conocimientos
+
+5. ¿Cuál consideran que fue el mayor problema técnico? ¿Qué hicieron para resolverlo?
+
+el IDE fue complicado necesitamos contactarnos con el monitor
+
+6. ¿Qué hicieron bien como equipo? ¿Qué se comprometen a hacer para mejorar los resultados?
+
+Mantuvimos una buena comunicacion, nos comprometemos a seguir trabajando asi
+
+7. Considerando las prácticas XP incluidas en los laboratorios. ¿cuál fue la más útil? ¿por qué?
+
+TDD para el manejo de posibles errores
+
+8. ¿Qué referencias usaron? ¿Cuál fue la más útil? Incluyan citas con estándares adecuados.
+
+La documentacion d java, notas de clase y referencias acerca de errores puntuales
