@@ -1,90 +1,88 @@
-# SilkRoad Simulator
+# 🧭 SilkRoad Simulator
 
-Proyecto inicial del curso **Desarrollo Orientado por Objetos (POOB)** – Ciclo 1, 2025-2.  
-Inspirado en el problema *The Silk Road … with Robots!* de la maratón internacional de programación 2024.
+**Proyecto del curso:** Desarrollo Orientado por Objetos (POOB)  
+**Ciclo:** 4 – 2025-2  
+**Autores:** Daniel Ahumada & Juan Neira  
 
-## Descripción
-Este proyecto implementa un **simulador de la Ruta de la Seda**, en el cual se pueden gestionar:
-- Tiendas (agregar, eliminar, reabastecer).
-- Robots (agregar, eliminar, mover, devolver a su posición inicial).
-- La ruta de la seda con una longitud definida.
-
-El simulador puede funcionar en modo **visible** (usando `shapes`) o en modo **invisible**.
-
-## Funcionalidades
-1. Crear una ruta de seda.
-2. Adicionar / eliminar tiendas.
-3. Adicionar / eliminar robots.
-4. Mover un robot.
-5. Reiniciar la ruta de seda.
-6. Hacer visible o invisible el simulador.
-7. Finalizar el simulador.
-8. Simular problema de la maraton
-9. Solucionar problema de la maraton
-
-## Tecnologías
-- **Java (BlueJ)**  
-- **Astah** (diagramas UML)  
-- **Shapes** (paquete gráfico provisto por el curso)
-# Retrospectiva — Proyecto SilkRoad
-
-## Diagramas de clase
-![Captura de pantalla](imagenes/Captura%20de%20pantalla_2025-09-11_18-00-24.png)
-
-## Diagramas de secuencia
-![Captura de pantalla 2](imagenes/Captura%20de%20pantalla_2025-09-11_18-00-47.png)
-![Captura de pantalla 3](imagenes/Captura%20de%20pantalla_2025-09-11_18-01-05.png)
-![Captura de pantalla 4](imagenes/Captura%20de%20pantalla_2025-09-11_18-02-07.png)
-
-### 1. ¿Cuáles fueron los mini-ciclos definidos? Justifíquenlos.  
-Definimos tres mini-ciclos principales:  
-- **Diseño básico de la idea y requerimientos.**  
-- **Implementación del código en Java.**  
-- **Pruebas y ajustes finales.**  
-
-Los mini-ciclos se definieron así porque nos permitió avanzar poco a poco, sin tener una guía clara, y asegurar que el proyecto fuera funcional antes de la entrega.
+Inspirado en el problema *“The Silk Road … with Robots!”* de la maratón internacional de programación 2024.
 
 ---
 
-### 2. ¿Cuál es el estado actual del proyecto en términos de mini-ciclos? ¿Por qué?  
-El proyecto se encuentra en el **tercer mini-ciclo**, porque ya tenemos el código funcionando y probado, y lo que falta es documentación y algunos detalles menores.
+## 📘 Descripción
+
+**SilkRoad Simulator** es una aplicación educativa en Java que modela la legendaria **Ruta de la Seda**, donde robots y tiendas interactúan a lo largo de un camino.  
+Cada robot puede desplazarse, recolectar dinero (*tenges*) y competir por maximizar ganancias según su tipo, mientras las tiendas ofrecen distintos comportamientos y reglas.
+
+El proyecto evoluciona a lo largo de los ciclos del curso POOB, y esta versión corresponde al **Ciclo 4: Refactorización y Extensión**, donde se consolidan principios de **herencia, encapsulamiento y extensibilidad**.
 
 ---
 
-### 3. ¿Cuál fue el tiempo total invertido por cada uno de ustedes? (Horas/Hombre)  
-- **Juan Manuel:** 8 horas.  
-- **Daniel:** 6 horas.  
+## ⚙️ Funcionalidades Principales
+
+### 🔹 Simulación General
+- Creación de una **ruta de seda** de tamaño variable.  
+- Representación visual usando el paquete `shapes`.  
+- Control de visibilidad del simulador (`makeVisible`, `makeInvisible`).  
+
+### 🏪 Tiendas
+- Crear, eliminar y reabastecer tiendas.  
+- Tipos disponibles:
+  - **Normal:** almacena y entrega dinero normalmente.  
+  - **Autonomous:** escoge su propia posición libre.  
+  - **Fighter:** solo puede ser vaciada por robots más ricos.  
+  - **RobinHood:** (tipo propuesto) reparte dinero entre tiendas pobres.
+
+### 🤖 Robots
+- Agregar, eliminar y mover robots individualmente o automáticamente.  
+- Tipos disponibles:
+  - **Normal:** comportamiento estándar.  
+  - **NeverBack:** no puede retroceder.  
+  - **Tender:** solo toma la mitad del dinero.  
+  - **IllBeBack:** puede regresar a su posición inicial.  
+
+### 🧩 Control de Simulación
+- Movimiento automático con búsqueda de la mejor tienda.  
+- Reinicio completo del sistema (`reboot`).  
+- Barra de progreso y efectos visuales (parpadeo del robot con mayor ganancia).  
 
 ---
 
-### 4. ¿Cuál consideran fue el mayor logro? ¿Por qué?  
-El mayor logro fue **lograr que el código en Java funcionara correctamente**. Fue la parte más difícil, ya que no contábamos con guías claras y tuvimos que deducir muchas cosas por nuestra cuenta.
+## 🧪 Pruebas Implementadas
+
+| Clase de prueba | Tipo | Descripción |
+|-----------------|------|-------------|
+| `SilkRoadC4Test` | Unitarias (JUnit 5) | Verifica la creación y comportamiento de los nuevos tipos de robots y tiendas. |
+| `SilkRoadCC4Test` | Colectiva | Casos de prueba compartidos entre equipos del curso. |
+| `SilkRoadAtest` | Aceptación visual | Ejecuta la simulación visual y pide confirmación al usuario. |
 
 ---
 
-### 5. ¿Cuál consideran que fue el mayor problema técnico? ¿Qué hicieron para resolverlo?  
+## 🛠️ Tecnologías Utilizadas
 
-El mayor problema técnico fue entender cómo programar las clases (`SilkRoad`, `Store`, `Robot`) y lograr que interactuaran entre sí de manera correcta.  
-La solución fue trabajar en conjunto, dividir responsabilidades y hacer varias pruebas hasta que el sistema funcionó como se esperaba.
-Ademas de que tuvimos que trabajar mas por nuestra cuenta con la informacion que teniamos a mano
-
----
-
-### 6. ¿Qué hicieron bien como equipo? ¿Qué se comprometen a hacer para mejorar los resultados?  
-- **Lo que hicimos bien:** apoyarnos entre los dos, revisar el trabajo del compañero y avanzar por nuestra cuenta cuando era necesario.  
-- **Para mejorar:** organizarnos mejor con el tiempo y buscar más apoyo externo (profesor, foros, ejemplos) en lugar de resolver todo improvisando.
+- ☕ **Java 17+**
+- 🧩 **BlueJ** – entorno educativo
+- 🧪 **JUnit 5** – framework de pruebas
+- 🧱 **Astah UML** – diagramas de clases y paquetes
+- 🎨 **Shapes** – librería gráfica provista por el curso
 
 ---
 
-### 7. Considerando las prácticas XP incluidas en los laboratorios, ¿cuál fue la más útil? ¿Por qué?  
-La práctica más útil fue la **programación en parejas**, porque permitió revisar errores y mejorar el código al tener dos puntos de vista diferentes.
+## 📄 Versión Actual
+
+**Ciclo 4 – Refactorización y Extensión (2025-2)**  
+Incluye:
+- Refactorización completa del paquete `shapes` usando herencia.  
+- Separación del sistema en dos paquetes (`shapes` y `silkroad`).  
+- Nuevos tipos de robots y tiendas.  
+- Pruebas unitarias y de aceptación integradas.  
 
 ---
 
-### 8. ¿Qué referencias usaron? ¿Cuál fue la más útil? Incluyan citas con estándares adecuados.  
-Usamos principalmente recursos en línea:  
-- Oracle. (2025). *Java SE Documentation*. Recuperado de: [https://docs.oracle.com/javase/](https://docs.oracle.com/javase/)  
-- Stack Overflow. (2025). Consultas específicas sobre Java. Recuperado de: [https://stackoverflow.com/](https://stackoverflow.com/)  
+## 👥 Autores
 
-La más útil fue la documentación oficial de **Java**, porque nos ayudó a confirmar cómo usar colecciones, comparadores y estructuras básicas.
+- **Daniel Ahumada**  
+- **Juan Neira**
 
+---
+
+> Proyecto desarrollado como parte del curso *Desarrollo Orientado por Objetos (POOB)* en la Escuela Colombiana de Ingeniería Julio Garavito.
