@@ -12,7 +12,7 @@ import java.util.List;
  * @version 2025-2
  */
 public class Road {
-    private List<celda> cells;    // celdas del camino
+    private List<Celda> cells;    // celdas del camino
     private int canvasWidth;
     private int canvasHeight;
     private int n;
@@ -57,7 +57,7 @@ public class Road {
             int[] pos = positions.get(i);
             int x = 100 + pos[1] * 40; // col
             int y = 100 + pos[0] * 40; // row
-            celda cell = new celda();
+            Celda cell = new Celda();
             cell.setPosition(x, y);
             cell.makeVisible();
             cells.add(cell);
@@ -66,18 +66,18 @@ public class Road {
 
     /** Hace visible la carretera */
     public void makeVisible() {
-        for (celda cell : cells) cell.makeVisible();
+        for (Celda cell : cells) cell.makeVisible();
     }
 
     /** Hace invisible la carretera */
     public void makeInvisible() {
-        for (celda cell : cells) cell.makeInvisible();
+        for (Celda cell : cells) cell.makeInvisible();
     }
 
     /** Limpia las celdas */
     public void clear() {
         if (cells != null) { // Verificación de seguridad
-            for (celda cell : cells) cell.makeInvisible();
+            for (Celda cell : cells) cell.makeInvisible();
             cells.clear();
         }
     }

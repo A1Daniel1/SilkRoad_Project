@@ -1,0 +1,745 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>SilkRoad.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">project (8/11/2025 9:32:13 p. m.)</a> &gt; <a href="../../index.html" class="el_group">project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">silkroad</a> &gt; <span class="el_source">SilkRoad.java</span></div><h1>SilkRoad.java</h1><pre class="source lang-java linenums">package silkroad;
+import shapes.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import javax.swing.JOptionPane;
+
+/**
+ * La clase SilkRoad representa la carretera principal donde interactúan
+ * robots y tiendas en la simulación de la Ruta de la Seda.
+ *
+ * @author Daniel Ahumada y Juan Neira
+ * @version ciclo 3
+ */
+public class SilkRoad {
+    private int length;
+    private List&lt;Store&gt; stores;
+    private List&lt;Robot&gt; robots;
+    private long totalProfit;
+    private boolean isVisible;
+    private boolean lastOperationOk;
+    private Road road;
+    private ProgressBar progressBar;
+
+    /**
+     * Constructor que crea una nueva carretera Silk Road.
+     *
+     * @param n dimensión del tablero (crea un camino de n celdas en espiral)
+     */
+<span class="fc" id="L31">    public SilkRoad(int n) {</span>
+<span class="fc" id="L32">        Canvas canvas = Canvas.getCanvas();</span>
+<span class="fc" id="L33">        canvas.eraseAll();</span>
+
+<span class="fc" id="L35">        this.road = new Road(n);</span>
+<span class="fc" id="L36">        this.length = n; // El camino tiene n celdas (0 a n-1)</span>
+<span class="fc" id="L37">        this.stores = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L38">        this.robots = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L39">        this.totalProfit = 0;</span>
+<span class="fc" id="L40">        this.isVisible = true;</span>
+<span class="fc" id="L41">        this.lastOperationOk = true;</span>
+     
+<span class="fc" id="L43">        this.progressBar = new ProgressBar(100, 50, 50, 400, 20);</span>
+<span class="fc" id="L44">        this.progressBar.makeVisible();</span>
+<span class="fc" id="L45">    }</span>
+    
+    /**
+     * Obtiene el tamaño real del camino (número de celdas).
+     *
+     * @return número de celdas en el camino
+     */
+    public int getLength() {
+<span class="nc" id="L53">        return this.length;</span>
+    }
+    
+    /**
+     * Coloca una tienda en una ubicación específica.
+     * Por defecto crea una tienda normal.
+     *
+     * @param location ubicación de la tienda
+     * @param tenges cantidad inicial de tenges
+     */
+    public void placeStore(int location, int tenges) {
+<span class="fc" id="L64">        placeStore(&quot;normal&quot;, location, tenges);</span>
+<span class="fc" id="L65">    }</span>
+    
+    /**
+     * Coloca una tienda de un tipo específico.
+     *
+     * @param type tipo de tienda: &quot;normal&quot;, &quot;autonomous&quot;, &quot;fighter&quot;,&quot;robinhood&quot;
+     * @param location ubicación de la tienda (ignorada si es autonomous)
+     * @param tenges cantidad inicial de tenges
+     */
+    public void placeStore(String type, int location, int tenges) {
+<span class="fc" id="L75">        lastOperationOk = false;</span>
+
+<span class="fc" id="L77">        Store newStore = null;</span>
+<span class="fc" id="L78">        int finalLocation = location;</span>
+        
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (type.equals(&quot;autonomous&quot;)) {</span>
+            // Para autonomous, primero creamos la tienda para que escoja su ubicación
+            // Luego verificamos si esa ubicación está disponible
+<span class="fc" id="L83">            int attempts = 0;</span>
+<span class="fc" id="L84">            boolean locationFound = false;</span>
+            
+<span class="pc bpc" id="L86" title="1 of 4 branches missed.">            while (attempts &lt; 100 &amp;&amp; !locationFound) {</span>
+<span class="fc" id="L87">                newStore = new AutonomousStore(road, location, tenges, this.length);</span>
+<span class="fc" id="L88">                finalLocation = newStore.getLocation();</span>
+                
+                // Verificar que no haya otra tienda en esa ubicación
+<span class="fc" id="L91">                boolean occupied = false;</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">                for (Store s : stores) {</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">                    if (s.getLocation() == finalLocation) {</span>
+<span class="nc" id="L94">                        occupied = true;</span>
+<span class="nc" id="L95">                        break;</span>
+                    }
+                }
+                
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">                if (!occupied) {</span>
+<span class="fc" id="L100">                    locationFound = true;</span>
+<span class="fc" id="L101">                } else {</span>
+<span class="nc" id="L102">                    newStore.makeInvisible();</span>
+<span class="nc" id="L103">                    attempts++;</span>
+                }
+            }
+            
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            if (!locationFound) {</span>
+<span class="nc" id="L108">                showError(&quot;No se pudo encontrar una ubicación libre para la tienda autónoma después de 100 intentos&quot;);</span>
+<span class="nc" id="L109">                return;</span>
+            }
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        } else if (type.equals(&quot;fighter&quot;)) {</span>
+<span class="pc bpc" id="L112" title="2 of 4 branches missed.">            if (location &lt; 0 || location &gt;= this.length) {</span>
+<span class="nc" id="L113">                showError(&quot;Ubicación inválida: &quot; + location + &quot;. Debe estar entre 0 y &quot; + (length - 1));</span>
+<span class="nc" id="L114">                return;</span>
+            }
+            
+            // Verificar que no haya otra tienda en esa ubicación
+<span class="fc bfc" id="L118" title="All 2 branches covered.">            for (Store s : stores) {</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">                if (s.getLocation() == location) {</span>
+<span class="nc" id="L120">                    showError(&quot;Ya existe una tienda en la ubicación &quot; + location);</span>
+<span class="nc" id="L121">                    return;</span>
+                }
+            }
+            
+<span class="fc" id="L125">            newStore = new FighterStore(road, location, tenges);</span>
+<span class="fc" id="L126">            finalLocation = location;</span>
+<span class="fc" id="L127">        } else { // &quot;normal&quot;</span>
+<span class="pc bpc" id="L128" title="2 of 4 branches missed.">            if (location &lt; 0 || location &gt;= this.length) {</span>
+<span class="nc" id="L129">                showError(&quot;Ubicación inválida: &quot; + location + &quot;. Debe estar entre 0 y &quot; + (length - 1));</span>
+<span class="nc" id="L130">                return;</span>
+            }
+            
+            // Verificar que no haya otra tienda en esa ubicación
+<span class="fc bfc" id="L134" title="All 2 branches covered.">            for (Store s : stores) {</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">                if (s.getLocation() == location) {</span>
+<span class="nc" id="L136">                    showError(&quot;Ya existe una tienda en la ubicación &quot; + location);</span>
+<span class="nc" id="L137">                    return;</span>
+                }
+            }
+            
+<span class="fc" id="L141">            newStore = new Store(road, location, tenges);</span>
+<span class="fc" id="L142">            finalLocation = location;</span>
+        }
+
+<span class="fc" id="L145">        stores.add(newStore);</span>
+<span class="fc" id="L146">        Collections.sort(stores, Comparator.comparingInt(Store::getLocation));</span>
+        
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (isVisible) {</span>
+<span class="fc" id="L149">            newStore.makeVisible();</span>
+        }
+        
+<span class="fc" id="L152">        updateProgressBar();</span>
+<span class="fc" id="L153">        lastOperationOk = true;</span>
+<span class="fc" id="L154">    }</span>
+
+    /**
+     * Elimina una tienda ubicada en una posición.
+     *
+     * @param location ubicación de la tienda a eliminar
+     */
+    public void removeStore(int location) {
+<span class="nc" id="L162">        lastOperationOk = false;</span>
+<span class="nc" id="L163">        Store storeToRemove = null;</span>
+        
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        for (Store s : stores) {</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">            if (s.getLocation() == location) {</span>
+<span class="nc" id="L167">                storeToRemove = s;</span>
+<span class="nc" id="L168">                break;</span>
+            }
+        }
+
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        if (storeToRemove != null) {</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">            if (isVisible) {</span>
+<span class="nc" id="L174">                storeToRemove.makeInvisible();</span>
+            }
+<span class="nc" id="L176">            stores.remove(storeToRemove);</span>
+<span class="nc" id="L177">            updateProgressBar();</span>
+<span class="nc" id="L178">            lastOperationOk = true;</span>
+<span class="nc" id="L179">        } else {</span>
+<span class="nc" id="L180">            showError(&quot;No se encontró tienda en la ubicación &quot; + location);</span>
+        }
+<span class="nc" id="L182">    }</span>
+
+    /**
+     * Coloca un robot en una ubicación específica.
+     * Por defecto crea un robot normal.
+     *
+     * @param location posición inicial del robot
+     */
+    public void placeRobot(int location) {
+<span class="fc" id="L191">        placeRobot(&quot;normal&quot;, location);</span>
+<span class="fc" id="L192">    }</span>
+    
+    /**
+     * Coloca un robot de un tipo específico.
+     *
+     * @param type tipo de robot: &quot;normal&quot;, &quot;neverback&quot;, &quot;tender&quot;,&quot;illbeback&quot;
+     * @param location posición inicial del robot
+     */
+    public void placeRobot(String type, int location) {
+<span class="fc" id="L201">        lastOperationOk = false;</span>
+
+<span class="pc bpc" id="L203" title="2 of 4 branches missed.">        if (location &lt; 0 || location &gt;= this.length) {</span>
+<span class="nc" id="L204">            showError(&quot;Ubicación inválida: &quot; + location + &quot;. Debe estar entre 0 y &quot; + (length - 1));</span>
+<span class="nc" id="L205">            return;</span>
+        }
+        
+        // Verificar que no haya otro robot en esa ubicación (tanto inicial como actual)
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        for (Robot r : robots) {</span>
+<span class="pc bpc" id="L210" title="1 of 2 branches missed.">            if (r.getCurrentLocation() == location) {</span>
+<span class="nc" id="L211">                showError(&quot;Ya existe un robot en la ubicación &quot; + location);</span>
+<span class="nc" id="L212">                return; </span>
+            }
+        }
+
+        try {
+            Robot newRobot;
+<span class="fc bfc" id="L218" title="All 2 branches covered.">            if (type.equals(&quot;neverback&quot;)) {</span>
+<span class="fc" id="L219">                newRobot = new NeverBackRobot(road, location);</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">            } else if (type.equals(&quot;tender&quot;)) {</span>
+<span class="fc" id="L221">                newRobot = new TenderRobot(road, location);</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">            } else if (type.equals(&quot;illbeback&quot;)) {</span>
+<span class="fc" id="L223">                newRobot = new IllBeBackRobot(road, location);    </span>
+<span class="fc" id="L224">            } else { // &quot;normal&quot;</span>
+<span class="fc" id="L225">                newRobot = new Robot(road, location);</span>
+            }
+            
+<span class="fc" id="L228">            robots.add(newRobot);</span>
+<span class="fc" id="L229">            Collections.sort(robots, Comparator.comparingInt(Robot::getCurrentLocation)); </span>
+            
+<span class="pc bpc" id="L231" title="1 of 2 branches missed.">            if (isVisible) {</span>
+<span class="fc" id="L232">                newRobot.makeVisible();</span>
+            }
+            
+<span class="fc" id="L235">            updateProgressBar();</span>
+<span class="fc" id="L236">            lastOperationOk = true;</span>
+<span class="pc" id="L237">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L238">            showError(e.getMessage());</span>
+        }
+<span class="fc" id="L240">    }</span>
+    
+    /**
+     * Elimina un robot ubicado en una posición.
+     *
+     * @param location ubicación actual del robot a eliminar
+     */
+    public void removeRobot(int location) {
+<span class="nc" id="L248">        lastOperationOk = false;</span>
+<span class="nc" id="L249">        Robot robotToRemove = null;</span>
+        
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        for (Robot r : robots) {</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">            if (r.getCurrentLocation() == location) {</span>
+<span class="nc" id="L253">                robotToRemove = r;</span>
+<span class="nc" id="L254">                break;</span>
+            }
+        }
+
+<span class="nc bnc" id="L258" title="All 2 branches missed.">        if (robotToRemove != null) {</span>
+<span class="nc" id="L259">            robotToRemove.destroy();</span>
+<span class="nc" id="L260">            robots.remove(robotToRemove);</span>
+<span class="nc" id="L261">            updateProgressBar();</span>
+<span class="nc" id="L262">            lastOperationOk = true;</span>
+<span class="nc" id="L263">        } else {</span>
+<span class="nc" id="L264">            showError(&quot;No se encontró robot en la ubicación &quot; + location);</span>
+        }
+<span class="nc" id="L266">    }</span>
+    
+    /**
+     * Mueve un robot desde su ubicación actual un número de metros.
+     * Si el robot llega a una tienda con tenges, automáticamente los recolecta.
+     *
+     * @param location ubicación actual del robot
+     * @param meters distancia a mover
+     */
+    public void moveRobot(int location, int meters) {
+<span class="fc" id="L276">        lastOperationOk = false;</span>
+<span class="fc" id="L277">        Robot robotToMove = null;</span>
+        
+<span class="pc bpc" id="L279" title="1 of 2 branches missed.">        for (Robot r : robots) {</span>
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">            if (r.getCurrentLocation() == location) {</span>
+<span class="fc" id="L281">                robotToMove = r;</span>
+<span class="fc" id="L282">                break;</span>
+            }
+        }
+
+<span class="pc bpc" id="L286" title="1 of 2 branches missed.">        if (robotToMove != null) {</span>
+<span class="fc" id="L287">            int targetLocation = robotToMove.getCurrentLocation() + meters;</span>
+<span class="pc bpc" id="L288" title="2 of 4 branches missed.">            if (targetLocation &lt; 0 || targetLocation &gt;= this.length) {</span>
+<span class="nc" id="L289">                showError(&quot;Movimiento inválido. La posición &quot; + targetLocation + &quot; está fuera de los límites (0-&quot; + (length - 1) + &quot;)&quot;);</span>
+<span class="nc" id="L290">                return;</span>
+            }
+            
+            // Verificar si el robot puede moverse a esa ubicación (para illbeback)
+<span class="pc bpc" id="L294" title="1 of 4 branches missed.">            if (!robotToMove.canMoveTo(targetLocation) &amp;&amp; robotToMove.getType()== &quot;illbeback&quot;) {</span>
+<span class="nc" id="L295">                showError(&quot;El robot &quot; + robotToMove.getType() + &quot; no puede moverse hacia adelante&quot;);</span>
+<span class="nc" id="L296">                return;</span>
+            }
+            // Verificar si el robot puede moverse a esa ubicación (para neverback)
+<span class="fc bfc" id="L299" title="All 2 branches covered.">            if (!robotToMove.canMoveTo(targetLocation)) {</span>
+<span class="fc" id="L300">                showError(&quot;El robot &quot; + robotToMove.getType() + &quot; no puede moverse hacia atrás&quot;);</span>
+<span class="fc" id="L301">                return;</span>
+            }
+            
+            // Verificar que no haya otro robot en la posición objetivo
+<span class="fc bfc" id="L305" title="All 2 branches covered.">            for (Robot r : robots) {</span>
+<span class="pc bpc" id="L306" title="3 of 4 branches missed.">                if (r != robotToMove &amp;&amp; r.getCurrentLocation() == targetLocation) {</span>
+<span class="nc" id="L307">                    showError(&quot;Ya hay un robot en la ubicación &quot; + targetLocation);</span>
+<span class="nc" id="L308">                    return;</span>
+                }
+            }
+            
+<span class="fc" id="L312">            int oldLocation = robotToMove.getCurrentLocation();</span>
+<span class="fc" id="L313">            robotToMove.moveTo(targetLocation);</span>
+            
+            // Verificar si hay una tienda en la nueva posición
+<span class="fc" id="L316">            Store storeAtTarget = getStoreAtLocation(targetLocation);</span>
+<span class="pc bpc" id="L317" title="1 of 4 branches missed.">            if (storeAtTarget != null &amp;&amp; storeAtTarget.getCurrentTenges() &gt; 0) {</span>
+<span class="fc" id="L318">                int collected = robotToMove.collectFrom(storeAtTarget);</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">                if (collected &gt; 0) {</span>
+<span class="fc" id="L320">                    int distance = Math.abs(targetLocation - oldLocation);</span>
+<span class="fc" id="L321">                    int profit = collected - distance;</span>
+<span class="fc" id="L322">                    robotToMove.addProfit(profit);</span>
+<span class="fc" id="L323">                    totalProfit += profit;</span>
+<span class="pc bpc" id="L324" title="1 of 2 branches missed.">                } else if (storeAtTarget.getType().equals(&quot;fighter&quot;)) {</span>
+<span class="fc" id="L325">                    showError(&quot;El robot no tiene suficiente dinero para vaciar esta tienda fighter&quot;);</span>
+                }
+            }
+            
+<span class="fc" id="L329">            Collections.sort(robots, Comparator.comparingInt(Robot::getCurrentLocation));</span>
+<span class="fc" id="L330">            updateProgressBar();</span>
+<span class="fc" id="L331">            updateVisualEffects();</span>
+<span class="fc" id="L332">            lastOperationOk = true;</span>
+<span class="fc" id="L333">        } else {</span>
+<span class="nc" id="L334">            showError(&quot;No se encontró robot en la ubicación &quot; + location);</span>
+        }
+<span class="fc" id="L336">    }</span>
+
+    /**
+     * Reabastece todas las tiendas de la carretera.
+     * Automáticamente hace que los robots recolecten de tiendas en su posición actual.
+     */
+    public void resupplyStores() {
+<span class="fc" id="L343">        lastOperationOk = false;</span>
+<span class="fc bfc" id="L344" title="All 2 branches covered.">        for (Store s : stores) {</span>
+<span class="fc" id="L345">            s.resupply();</span>
+        }
+        
+        // Automáticamente recolectar de tiendas en posición actual
+<span class="fc bfc" id="L349" title="All 2 branches covered.">        for (Robot robot : robots) {</span>
+<span class="fc" id="L350">            Store storeAtPosition = getStoreAtLocation(robot.getCurrentLocation());</span>
+<span class="pc bpc" id="L351" title="1 of 4 branches missed.">            if (storeAtPosition != null &amp;&amp; storeAtPosition.getCurrentTenges() &gt; 0) {</span>
+<span class="fc" id="L352">                int collected = robot.collectFrom(storeAtPosition);</span>
+<span class="fc bfc" id="L353" title="All 2 branches covered.">                if (collected &gt; 0) {</span>
+<span class="fc" id="L354">                    robot.addProfit(collected); // Sin costo de movimiento</span>
+<span class="fc" id="L355">                    totalProfit += collected;</span>
+                }
+            }
+        }
+        
+<span class="fc" id="L360">        updateStoreAppearances();</span>
+<span class="fc" id="L361">        updateProgressBar();</span>
+<span class="fc" id="L362">        updateVisualEffects();</span>
+<span class="fc" id="L363">        lastOperationOk = true;</span>
+<span class="fc" id="L364">    }</span>
+
+    /**
+     * Devuelve todos los robots a su posición inicial.
+     * Los robots neverback no pueden regresar.
+     */
+    public void returnRobots() {
+<span class="fc" id="L371">        lastOperationOk = false;</span>
+<span class="fc bfc" id="L372" title="All 2 branches covered.">        for (Robot r : robots) {</span>
+            // Solo regresar si no es neverback
+<span class="fc bfc" id="L374" title="All 2 branches covered.">            if (!r.getType().equals(&quot;neverback&quot;)) {</span>
+<span class="fc" id="L375">                r.returnToInitialPosition();</span>
+            }
+        }
+<span class="fc" id="L378">        Collections.sort(robots, Comparator.comparingInt(Robot::getCurrentLocation));</span>
+<span class="fc" id="L379">        updateProgressBar();</span>
+<span class="fc" id="L380">        lastOperationOk = true;</span>
+<span class="fc" id="L381">    }</span>
+
+    /**
+     * Reinicia la simulación.
+     */
+    public void reboot() {
+<span class="fc" id="L387">        lastOperationOk = false;</span>
+<span class="fc" id="L388">        resupplyStores();</span>
+<span class="fc" id="L389">        returnRobots();</span>
+<span class="fc" id="L390">        this.totalProfit = 0;</span>
+        
+<span class="fc bfc" id="L392" title="All 2 branches covered.">        for (Robot r : robots) {</span>
+<span class="fc" id="L393">            r.clearProfits();</span>
+        }
+        
+<span class="fc bfc" id="L396" title="All 2 branches covered.">        for (Store s : stores) {</span>
+<span class="fc" id="L397">            s.resetTimesEmptied();</span>
+        }
+        
+<span class="fc" id="L400">        progressBar.reset();</span>
+<span class="fc" id="L401">        updateVisualEffects();</span>
+<span class="fc" id="L402">        lastOperationOk = true;</span>
+<span class="fc" id="L403">    }</span>
+
+    /**
+     * @return el beneficio total acumulado
+     */
+    public int profit() {
+<span class="fc" id="L409">        return (int) this.totalProfit; </span>
+    }
+    
+    /**
+     * @return matriz con las tiendas (ubicación, tenges actuales)
+     */
+    public int[][] stores() {
+<span class="fc" id="L416">        int[][] result = new int[stores.size()][2];</span>
+<span class="fc bfc" id="L417" title="All 2 branches covered.">        for (int i = 0; i &lt; stores.size(); i++) {</span>
+<span class="fc" id="L418">            Store s = stores.get(i);</span>
+<span class="fc" id="L419">            result[i][0] = s.getLocation();</span>
+<span class="fc" id="L420">            result[i][1] = s.getCurrentTenges();</span>
+        }
+<span class="fc" id="L422">        return result;</span>
+    }
+
+    /**
+     * @return matriz con los robots (ubicación actual, ubicación inicial)
+     */
+    public int[][] robots() {
+<span class="fc" id="L429">        int[][] result = new int[robots.size()][2];</span>
+<span class="fc bfc" id="L430" title="All 2 branches covered.">        for (int i = 0; i &lt; robots.size(); i++) {</span>
+<span class="fc" id="L431">            Robot r = robots.get(i);</span>
+<span class="fc" id="L432">            result[i][0] = r.getCurrentLocation();</span>
+<span class="fc" id="L433">            result[i][1] = r.getInitialLocation();</span>
+        }
+<span class="fc" id="L435">        return result;</span>
+    }
+
+    /**
+     * Hace visible la carretera y todos los elementos.
+     */
+    public void makeVisible() {
+<span class="fc" id="L442">        lastOperationOk = false;</span>
+<span class="fc" id="L443">        Canvas.getCanvas().setVisible(true);</span>
+<span class="fc" id="L444">        this.isVisible = true;</span>
+
+<span class="fc" id="L446">        road.makeVisible();</span>
+
+<span class="pc bpc" id="L448" title="1 of 2 branches missed.">        for (Store s : stores) {</span>
+<span class="nc" id="L449">            s.makeVisible();</span>
+        }
+
+<span class="pc bpc" id="L452" title="1 of 2 branches missed.">        for (Robot r : robots) {</span>
+<span class="nc" id="L453">            r.makeVisible();</span>
+        }
+
+<span class="fc" id="L456">        updateVisualEffects();</span>
+<span class="fc" id="L457">        lastOperationOk = true;</span>
+<span class="fc" id="L458">    }</span>
+
+    /**
+     * Oculta la carretera y todos los elementos.
+     */
+    public void makeInvisible() {
+<span class="nc" id="L464">        lastOperationOk = false;</span>
+<span class="nc" id="L465">        Canvas.getCanvas().setVisible(false);</span>
+<span class="nc" id="L466">        this.isVisible = false;</span>
+<span class="nc" id="L467">        road.makeInvisible();</span>
+<span class="nc" id="L468">        lastOperationOk = true;</span>
+<span class="nc" id="L469">    }</span>
+
+    /**
+     * Finaliza la simulación.
+     */
+    public void finish() {
+<span class="nc" id="L475">        lastOperationOk = false;</span>
+<span class="nc" id="L476">        cleanupAll();</span>
+<span class="nc" id="L477">        System.exit(0);</span>
+<span class="nc" id="L478">    }</span>
+
+    /**
+     * Limpia todos los recursos de la simulación.
+     */
+    private void cleanupAll() {
+<span class="nc bnc" id="L484" title="All 2 branches missed.">        for (Robot robot : robots) {</span>
+<span class="nc" id="L485">            robot.destroy();</span>
+        }
+<span class="nc" id="L487">        robots.clear();</span>
+<span class="nc" id="L488">        stores.clear();</span>
+<span class="nc" id="L489">        Canvas.getCanvas().eraseAll();</span>
+<span class="nc" id="L490">    }</span>
+
+    /**
+     * @return true si la última operación fue exitosa
+     */
+    public boolean ok() {
+<span class="fc" id="L496">        return this.lastOperationOk;</span>
+    }
+
+    /**
+     * Crea la ruta de seda a partir de entrada de datos del problema de maratón.
+     * Formato: {1, x} -&gt; robot en x, {2, x, c} -&gt; tienda en x con c tenges
+     *
+     * @param lines matriz con las instrucciones de creación
+     */
+    public void createFromInput(int[][] lines) {
+<span class="fc bfc" id="L506" title="All 2 branches covered.">        for (int[] parts : lines) {</span>
+<span class="fc bfc" id="L507" title="All 2 branches covered.">            if (parts[0] == 1) {</span>
+<span class="fc" id="L508">                int x = parts[1];</span>
+<span class="fc" id="L509">                placeRobot(x);</span>
+<span class="pc bpc" id="L510" title="1 of 2 branches missed.">            } else if (parts[0] == 2) {</span>
+<span class="fc" id="L511">                int x = parts[1];</span>
+<span class="fc" id="L512">                int c = parts[2];</span>
+<span class="fc" id="L513">                placeStore(x, c);</span>
+            }
+        }
+<span class="fc" id="L516">        updateVisualEffects();</span>
+<span class="fc" id="L517">    }</span>
+
+    /**
+     * Movimiento automático de robots buscando maximizar ganancias.
+     * Verifica que no haya colisiones entre robots.
+     */
+    public void autoMoveRobots() {
+<span class="fc" id="L524">        progressBar.setValue(0);</span>
+        
+<span class="fc bfc" id="L526" title="All 2 branches covered.">        for (int i = 0; i &lt; robots.size(); i++) {</span>
+<span class="fc" id="L527">            Robot robot = robots.get(i);</span>
+            
+            // Primero verificar si hay una tienda con tenges en la posición actual
+<span class="fc" id="L530">            Store currentStore = getStoreAtLocation(robot.getCurrentLocation());</span>
+<span class="pc bpc" id="L531" title="1 of 4 branches missed.">            if (currentStore != null &amp;&amp; currentStore.getCurrentTenges() &gt; 0) {</span>
+<span class="nc" id="L532">                int collected = robot.collectFrom(currentStore);</span>
+<span class="nc bnc" id="L533" title="All 2 branches missed.">                if (collected &gt; 0) {</span>
+<span class="nc" id="L534">                    robot.addProfit(collected); // Sin costo de movimiento</span>
+<span class="nc" id="L535">                    totalProfit += collected;</span>
+                }
+<span class="nc" id="L537">            } else {</span>
+                // Buscar la mejor tienda disponible
+<span class="fc" id="L539">                Store bestStore = null;</span>
+<span class="fc" id="L540">                int bestProfit = Integer.MIN_VALUE;</span>
+                
+<span class="fc bfc" id="L542" title="All 2 branches covered.">                for (Store store : stores) {</span>
+<span class="fc bfc" id="L543" title="All 2 branches covered.">                    if (store.getCurrentTenges() &gt; 0) {</span>
+<span class="fc" id="L544">                        int distance = Math.abs(robot.getCurrentLocation() - store.getLocation());</span>
+<span class="fc" id="L545">                        int profit = store.getCurrentTenges() - distance;</span>
+                        
+                        // Verificar si el robot puede moverse a esa ubicación
+<span class="fc bfc" id="L548" title="All 4 branches covered.">                        if (robot.canMoveTo(store.getLocation()) &amp;&amp; profit &gt; bestProfit) {</span>
+                            // Verificar que no haya otro robot en esa ubicación
+<span class="fc" id="L550">                            boolean occupied = false;</span>
+<span class="fc bfc" id="L551" title="All 2 branches covered.">                            for (Robot r : robots) {</span>
+<span class="fc bfc" id="L552" title="All 4 branches covered.">                                if (r != robot &amp;&amp; r.getCurrentLocation() == store.getLocation()) {</span>
+<span class="fc" id="L553">                                    occupied = true;</span>
+<span class="fc" id="L554">                                    break;</span>
+                                }
+                            }
+                            
+<span class="fc bfc" id="L558" title="All 2 branches covered.">                            if (!occupied) {</span>
+<span class="fc" id="L559">                                bestProfit = profit;</span>
+<span class="fc" id="L560">                                bestStore = store;</span>
+                            }
+                        }
+                    }
+                }
+                
+<span class="pc bpc" id="L566" title="1 of 4 branches missed.">                if (bestStore != null &amp;&amp; bestProfit &gt; 0) {</span>
+<span class="fc" id="L567">                    int oldLocation = robot.getCurrentLocation();</span>
+<span class="fc" id="L568">                    robot.moveTo(bestStore.getLocation());</span>
+<span class="fc" id="L569">                    int collected = robot.collectFrom(bestStore);</span>
+<span class="fc bfc" id="L570" title="All 2 branches covered.">                    if (collected &gt; 0) {</span>
+<span class="fc" id="L571">                        int distance = Math.abs(bestStore.getLocation() - oldLocation);</span>
+<span class="fc" id="L572">                        robot.addProfit(collected - distance);</span>
+<span class="fc" id="L573">                        totalProfit += bestProfit;</span>
+                    }
+                }
+            }
+            
+<span class="fc" id="L578">            int progress = ((i + 1) * 100) / robots.size();</span>
+<span class="fc" id="L579">            progressBar.setValue(progress);</span>
+            try {
+<span class="fc" id="L581">                Thread.sleep(100); </span>
+<span class="pc" id="L582">            } catch (InterruptedException e) {</span>
+                // Ignorar
+            }
+        }
+        
+<span class="fc" id="L587">        progressBar.setValue(100);</span>
+<span class="fc" id="L588">        updateVisualEffects();</span>
+<span class="fc" id="L589">    }</span>
+
+    /**
+     * Consulta cuántas veces ha sido desocupada una tienda específica.
+     *
+     * @param location ubicación de la tienda
+     * @return número de veces que la tienda ha sido vaciada, -1 si no existe
+     */
+    public int consultStoreEmptyTimes(int location) {
+<span class="fc bfc" id="L598" title="All 2 branches covered.">        for (Store store : stores) {</span>
+<span class="pc bpc" id="L599" title="1 of 2 branches missed.">            if (store.getLocation() == location) {</span>
+<span class="nc" id="L600">                return store.getTimesEmptied();</span>
+            }
+        }
+<span class="fc" id="L603">        showError(&quot;No existe tienda en la ubicación &quot; + location);</span>
+<span class="fc" id="L604">        return -1;</span>
+    }
+
+    /**
+     * Consulta las ganancias de un robot específico.
+     *
+     * @param initialLocation ubicación inicial del robot
+     * @return lista de ganancias del robot, null si no existe
+     */
+    public List&lt;Integer&gt; consultRobotProfits(int initialLocation) {
+<span class="fc bfc" id="L614" title="All 2 branches covered.">        for (Robot robot : robots) {</span>
+<span class="pc bpc" id="L615" title="1 of 2 branches missed.">            if (robot.getInitialLocation() == initialLocation) {</span>
+<span class="nc" id="L616">                return robot.getProfits();</span>
+            }
+        }
+<span class="fc" id="L619">        showError(&quot;No existe robot con ubicación inicial &quot; + initialLocation);</span>
+<span class="fc" id="L620">        return null;</span>
+    }
+
+    /**
+     * Consulta la ganancia total de un robot específico.
+     *
+     * @param initialLocation ubicación inicial del robot
+     * @return ganancia total del robot, -1 si no existe
+     */
+    public int consultRobotTotalProfit(int initialLocation) {
+<span class="fc bfc" id="L630" title="All 2 branches covered.">        for (Robot robot : robots) {</span>
+<span class="pc bpc" id="L631" title="1 of 2 branches missed.">            if (robot.getInitialLocation() == initialLocation) {</span>
+<span class="nc" id="L632">                return robot.getTotalProfit();</span>
+            }
+        }
+<span class="fc" id="L635">        showError(&quot;No existe robot con ubicación inicial &quot; + initialLocation);</span>
+<span class="fc" id="L636">        return -1;</span>
+    }
+
+    /**
+     * Actualiza la apariencia de las tiendas según su estado.
+     */
+    private void updateStoreAppearances() {
+<span class="fc bfc" id="L643" title="All 2 branches covered.">        for (Store store : stores) {</span>
+<span class="fc" id="L644">            store.updateAppearance();</span>
+        }
+<span class="fc" id="L646">    }</span>
+
+    /**
+     * Actualiza todos los efectos visuales (tiendas desocupadas y robot parpadeante).
+     */
+    private void updateVisualEffects() {
+<span class="fc" id="L652">        updateStoreAppearances();</span>
+<span class="fc" id="L653">        updateRobotBlinking();</span>
+<span class="fc" id="L654">    }</span>
+
+    /**
+     * Actualiza el parpadeo del robot con mayor ganancia.
+     */
+    private void updateRobotBlinking() {
+<span class="fc bfc" id="L660" title="All 2 branches covered.">        if (robots.isEmpty()) return;</span>
+
+<span class="fc" id="L662">        Robot topRobot = null;</span>
+<span class="fc" id="L663">        int maxProfit = Integer.MIN_VALUE;</span>
+
+<span class="fc bfc" id="L665" title="All 2 branches covered.">        for (Robot robot : robots) {</span>
+<span class="fc" id="L666">            int profit = robot.getTotalProfit();</span>
+<span class="fc bfc" id="L667" title="All 2 branches covered.">            if (profit &gt; maxProfit) {</span>
+<span class="fc" id="L668">                maxProfit = profit;</span>
+<span class="fc" id="L669">                topRobot = robot;</span>
+            }
+        }
+
+<span class="fc bfc" id="L673" title="All 2 branches covered.">        for (Robot robot : robots) {</span>
+<span class="fc bfc" id="L674" title="All 4 branches covered.">            if (robot == topRobot &amp;&amp; maxProfit &gt; 0) {</span>
+<span class="fc" id="L675">                robot.startBlinking();</span>
+<span class="fc" id="L676">            } else {</span>
+<span class="fc" id="L677">                robot.stopBlinking();</span>
+            }
+        }
+<span class="fc" id="L680">    }</span>
+
+    /**
+     * Actualiza la barra de progreso basada en el estado de la simulación.
+     */
+    private void updateProgressBar() {
+<span class="pc bpc" id="L686" title="1 of 4 branches missed.">        if (stores.isEmpty() &amp;&amp; robots.isEmpty()) {</span>
+<span class="nc" id="L687">            progressBar.setValue(0);</span>
+<span class="nc" id="L688">            return;</span>
+        }
+        
+<span class="fc" id="L691">        int storeProgress = Math.min(stores.size() * 10, 25);</span>
+<span class="fc" id="L692">        int robotProgress = Math.min(robots.size() * 10, 25);</span>
+<span class="fc" id="L693">        int profitProgress = (int) Math.min(totalProfit / 10, 25);</span>
+<span class="fc" id="L694">        int activityProgress = calculateActivityProgress();</span>
+        
+<span class="fc" id="L696">        int totalProgress = storeProgress + robotProgress + profitProgress + activityProgress;</span>
+<span class="fc" id="L697">        progressBar.setValue(totalProgress);</span>
+<span class="fc" id="L698">    }</span>
+
+    /**
+     * Calcula el progreso basado en la actividad de la simulación.
+     */
+    private int calculateActivityProgress() {
+<span class="fc" id="L704">        int activity = 0;</span>
+
+<span class="fc bfc" id="L706" title="All 2 branches covered.">        for (Store store : stores) {</span>
+<span class="fc bfc" id="L707" title="All 2 branches covered.">            if (store.getTimesEmptied() &gt; 0) {</span>
+<span class="fc" id="L708">                activity += 5;</span>
+            }
+        }
+        
+<span class="fc bfc" id="L712" title="All 2 branches covered.">        for (Robot robot : robots) {</span>
+<span class="fc bfc" id="L713" title="All 2 branches covered.">            if (robot.getTotalProfit() &gt; 0) {</span>
+<span class="fc" id="L714">                activity += 5;</span>
+            }
+        }
+        
+<span class="fc" id="L718">        return Math.min(activity, 25);</span>
+    }
+
+    /**
+     * Busca una tienda en una ubicación específica.
+     *
+     * @param location ubicación a buscar
+     * @return la tienda en esa ubicación, o null si no existe
+     */
+    private Store getStoreAtLocation(int location) {
+<span class="fc bfc" id="L728" title="All 2 branches covered.">        for (Store store : stores) {</span>
+<span class="fc bfc" id="L729" title="All 2 branches covered.">            if (store.getLocation() == location) {</span>
+<span class="fc" id="L730">                return store;</span>
+            }
+        }
+<span class="fc" id="L733">        return null;</span>
+    }
+
+    /**
+     * Muestra un mensaje de error usando JOptionPane.
+     *
+     * @param message mensaje de error a mostrar
+     */
+    private void showError(String message) {
+<span class="fc" id="L742">        JOptionPane.showMessageDialog(null, message, &quot;Error&quot;, JOptionPane.ERROR_MESSAGE);</span>
+<span class="fc" id="L743">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span>project (8/11/2025 9:32:13 p. m.)</div></body></html>

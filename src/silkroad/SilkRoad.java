@@ -77,7 +77,7 @@ public class SilkRoad {
         Store newStore = null;
         int finalLocation = location;
         
-        if (type.equals("autonomous")) {
+        if ("autonomous".equals(type)) {
             // Para autonomous, primero creamos la tienda para que escoja su ubicación
             // Luego verificamos si esa ubicación está disponible
             int attempts = 0;
@@ -108,7 +108,7 @@ public class SilkRoad {
                 showError("No se pudo encontrar una ubicación libre para la tienda autónoma después de 100 intentos");
                 return;
             }
-        } else if (type.equals("fighter")) {
+        } else if ("fighter".equals(type)) {
             if (location < 0 || location >= this.length) {
                 showError("Ubicación inválida: " + location + ". Debe estar entre 0 y " + (length - 1));
                 return;
@@ -214,16 +214,18 @@ public class SilkRoad {
         }
 
         try {
-            Robot newRobot;
-            if (type.equals("neverback")) {
-                newRobot = new NeverBackRobot(road, location);
-            } else if (type.equals("tender")) {
-                newRobot = new TenderRobot(road, location);
-            } else if (type.equals("illbeback")) {
-                newRobot = new IllBeBackRobot(road, location);    
-            } else { // "normal"
-                newRobot = new Robot(road, location);
-            }
+        	final Robot newRobot;
+
+        	if ("neverback".equals(type)) {
+        	    newRobot = new NeverBackRobot(road, location);
+        	} else if ("tender".equals(type)) {
+        	    newRobot = new TenderRobot(road, location);
+        	} else if ("illbeback".equals(type)) {
+        	    newRobot = new IllBeBackRobot(road, location);
+        	} else {
+        	    newRobot = new Robot(road, location);
+        	}
+
             
             robots.add(newRobot);
             Collections.sort(robots, Comparator.comparingInt(Robot::getCurrentLocation)); 
@@ -570,7 +572,7 @@ public class SilkRoad {
                     if (collected > 0) {
                         int distance = Math.abs(bestStore.getLocation() - oldLocation);
                         robot.addProfit(collected - distance);
-                        totalProfit += bestProfit;
+                        totalProfit += collected - distance;
                     }
                 }
             }
@@ -580,7 +582,7 @@ public class SilkRoad {
             try {
                 Thread.sleep(100); 
             } catch (InterruptedException e) {
-                // Ignorar
+            	Thread.currentThread().interrupt(); 
             }
         }
         
@@ -617,7 +619,7 @@ public class SilkRoad {
             }
         }
         showError("No existe robot con ubicación inicial " + initialLocation);
-        return null;
+        return Collections.emptyList();
     }
 
     /**
@@ -633,7 +635,7 @@ public class SilkRoad {
             }
         }
         showError("No existe robot con ubicación inicial " + initialLocation);
-        return -1;
+        return 0;
     }
 
     /**

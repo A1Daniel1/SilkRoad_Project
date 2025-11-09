@@ -45,7 +45,20 @@ public class SilkRoadContest {
 
         return totalProfit;
     }
-
+    
+    /**
+     * Realiza una pausa segura en milisegundos sin interrumpir el estado del hilo.
+     *
+     * @param millis tiempo en milisegundos a esperar
+     */
+    private void sleepSafely(final int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Mantiene el estado de interrupción
+            System.err.println("Simulación interrumpida: " + e.getMessage());
+        }
+    }
     /**
      * Ejecuta la simulación visualmente, mostrando día a día y paso a paso.
      *
@@ -56,44 +69,32 @@ public class SilkRoadContest {
         // Reiniciar y hacer visible
         resetSimulation();
         silkRoad.makeVisible();
+        
+        final int INITIAL_DELAY_MS = 1000;
+        final int SLOW_DELAY_MS = 2000;
+        final int FAST_DELAY_MS = 500;
 
-        // Asegurar que la ventana esté visible y en primer plano
-        try {
-            Thread.sleep(1000); // Pausa inicial para que se muestre
-        } catch (InterruptedException e) {
-            // ignorar
-        }
+        final int delay = slow ? SLOW_DELAY_MS : FAST_DELAY_MS;
 
-        int delay = slow ? 2000 : 500; // milisegundos
+        // Pausa inicial para que la interfaz se muestre correctamente
+        sleepSafely(INITIAL_DELAY_MS);
+
 
         for (int day = 0; day < days; day++) {
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                // ignorar
-            }
-
+            sleepSafely(delay);
             silkRoad.autoMoveRobots();
 
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                // ignorar
-            }
-
+            sleepSafely(delay);
             silkRoad.resupplyStores();
 
-            // Actualizar barra de progreso
+            // Actualizar barra de progreso (ya se actualiza internamente)
             int progress = ((day + 1) * 100) / days;
-            // Nota: la barra se actualiza automáticamente en autoMoveRobots
+            // ProgressBar se actualiza dentro de autoMoveRobots()
         }
 
-        // Finalizar
-        try {
-            Thread.sleep(delay * 2);
-        } catch (InterruptedException e) {
-            // ignorar
-        }
+        // Pausa final antes de terminar la simulación
+        sleepSafely(delay * 2);
+
     }
 
     /**

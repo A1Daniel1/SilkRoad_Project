@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Figura.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">project (8/11/2025 9:32:13 p. m.)</a> &gt; <a href="../../index.html" class="el_group">project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">shapes</a> &gt; <span class="el_source">Figura.java</span></div><h1>Figura.java</h1><pre class="source lang-java linenums">package shapes;
+import silkroad.*;
+
+/**
+ * Clase abstracta base para las figuras.
+ * Centraliza comportamiento común y evita repetición de código.
+ *
+ * @author Daniel Ahumada y Juan Neira
+ * @version ciclo 4
+ */
+public abstract class Figura {
+
+    // 🔒 Encapsulamiento correcto: accesible en subclases, no fuera del paquete
+    protected int xPosition;
+    protected int yPosition;
+    protected String color;
+    protected boolean isVisible;
+
+    /**
+     * Constructor por defecto
+     */
+<span class="fc" id="L22">    public Figura() {</span>
+<span class="fc" id="L23">        xPosition = 0;</span>
+<span class="fc" id="L24">        yPosition = 0;</span>
+<span class="fc" id="L25">        color = &quot;blue&quot;;</span>
+<span class="fc" id="L26">        isVisible = false;</span>
+<span class="fc" id="L27">    }</span>
+
+    /** Hace visible la figura. */
+    public void makeVisible() {
+<span class="fc" id="L31">        isVisible = true;</span>
+<span class="fc" id="L32">        draw();</span>
+<span class="fc" id="L33">    }</span>
+
+    /** Hace invisible la figura. */
+    public void makeInvisible() {
+<span class="nc" id="L37">        erase();</span>
+<span class="nc" id="L38">        isVisible = false;</span>
+<span class="nc" id="L39">    }</span>
+
+    /** Mueve la figura hacia la derecha. */
+    public void moveRight() {
+<span class="nc" id="L43">        moveHorizontal(20);</span>
+<span class="nc" id="L44">    }</span>
+
+    /** Mueve la figura hacia la izquierda. */
+    public void moveLeft() {
+<span class="nc" id="L48">        moveHorizontal(-20);</span>
+<span class="nc" id="L49">    }</span>
+
+    /** Mueve la figura hacia arriba. */
+    public void moveUp() {
+<span class="nc" id="L53">        moveVertical(-20);</span>
+<span class="nc" id="L54">    }</span>
+
+    /** Mueve la figura hacia abajo. */
+    public void moveDown() {
+<span class="nc" id="L58">        moveVertical(20);</span>
+<span class="nc" id="L59">    }</span>
+
+    /** Mueve la figura horizontalmente. */
+    public void moveHorizontal(int distance) {
+<span class="fc" id="L63">        erase();</span>
+<span class="fc" id="L64">        xPosition += distance;</span>
+<span class="fc" id="L65">        draw();</span>
+<span class="fc" id="L66">    }</span>
+
+    /** Mueve la figura verticalmente. */
+    public void moveVertical(int distance) {
+<span class="fc" id="L70">        erase();</span>
+<span class="fc" id="L71">        yPosition += distance;</span>
+<span class="fc" id="L72">        draw();</span>
+<span class="fc" id="L73">    }</span>
+
+    /** Mueve la figura lentamente en dirección horizontal. */
+    public void slowMoveHorizontal(int distance) {
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        int delta = (distance &lt; 0) ? -1 : 1;</span>
+<span class="nc" id="L78">        distance = Math.abs(distance);</span>
+
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        for (int i = 0; i &lt; distance; i++) {</span>
+<span class="nc" id="L81">            xPosition += delta;</span>
+<span class="nc" id="L82">            draw();</span>
+        }
+<span class="nc" id="L84">    }</span>
+
+    /** Mueve la figura lentamente en dirección vertical. */
+    public void slowMoveVertical(int distance) {
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        int delta = (distance &lt; 0) ? -1 : 1;</span>
+<span class="nc" id="L89">        distance = Math.abs(distance);</span>
+
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        for (int i = 0; i &lt; distance; i++) {</span>
+<span class="nc" id="L92">            yPosition += delta;</span>
+<span class="nc" id="L93">            draw();</span>
+        }
+<span class="nc" id="L95">    }</span>
+
+    /** Cambia el color de la figura. */
+    public void changeColor(String newColor) {
+<span class="fc" id="L99">        color = newColor;</span>
+<span class="fc" id="L100">        draw();</span>
+<span class="fc" id="L101">    }</span>
+
+    /** Establece la posición de la figura. */
+    public void setPosition(int x, int y) {
+<span class="fc" id="L105">        erase();</span>
+<span class="fc" id="L106">        xPosition = x;</span>
+<span class="fc" id="L107">        yPosition = y;</span>
+<span class="fc" id="L108">        draw();</span>
+<span class="fc" id="L109">    }</span>
+
+    /** Dibuja la figura (debe implementarse en cada subclase). */
+    public abstract void draw();
+
+    /** Borra la figura del canvas. */
+    public void erase() {
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (isVisible) {</span>
+<span class="fc" id="L117">            Canvas canvas = Canvas.getCanvas();</span>
+<span class="fc" id="L118">            canvas.erase(this);</span>
+        }
+<span class="fc" id="L120">    }</span>
+
+<span class="fc" id="L122">    public int getXPosition() { return xPosition; }</span>
+<span class="fc" id="L123">    public int getYPosition() { return yPosition; }</span>
+<span class="nc" id="L124">    public String getColor() { return color; }</span>
+<span class="nc" id="L125">    public boolean isVisible() { return isVisible; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span>project (8/11/2025 9:32:13 p. m.)</div></body></html>

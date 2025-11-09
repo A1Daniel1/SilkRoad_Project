@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Robot.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">project (8/11/2025 9:32:13 p. m.)</a> &gt; <a href="../../index.html" class="el_group">project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">silkroad</a> &gt; <span class="el_source">Robot.java</span></div><h1>Robot.java</h1><pre class="source lang-java linenums">package silkroad;
+import shapes.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.Timer;
+
+/**
+ * La clase Robot representa un robot dentro de la simulación Silk Road.
+ * El robot con mayor ganancia parpadea para destacarse visualmente.
+ *
+ * @author Daniel Ahumada y Juan Neira
+ * @version ciclo 3
+ */
+public class Robot {
+    protected int initialLocation;
+    protected int currentLocation;
+    protected Circle visualRepresentation;
+    protected Road road;
+    protected List&lt;Integer&gt; profits;
+    protected String originalColor;
+    protected boolean isBlinking;
+    protected Timer blinkTimer;
+    protected boolean isVisible;
+    protected int blinkCount;
+    protected String type; // &quot;normal&quot;, &quot;neverback&quot;, &quot;tender&quot;
+
+    /**
+     * Constructor que crea un robot en una ubicación inicial específica.
+     *
+     * @param road la carretera
+     * @param location posición inicial del robot
+     */
+<span class="fc" id="L35">    public Robot(Road road, int location) {</span>
+<span class="fc" id="L36">        this.road = road;</span>
+<span class="fc" id="L37">        this.initialLocation = location;</span>
+<span class="fc" id="L38">        this.currentLocation = location;</span>
+<span class="fc" id="L39">        this.visualRepresentation = new Circle();</span>
+<span class="fc" id="L40">        this.visualRepresentation.changeSize(20);</span>
+        
+        // Validar que la ubicación existe en el camino
+<span class="fc" id="L43">        int x = road.getX(location);</span>
+<span class="fc" id="L44">        int y = road.getY(location);</span>
+        
+<span class="fc" id="L46">        this.visualRepresentation.setPosition(x + 20, y + 20);</span>
+<span class="fc" id="L47">        this.profits = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L48">        this.isBlinking = false;</span>
+<span class="fc" id="L49">        this.isVisible = false;</span>
+<span class="fc" id="L50">        this.blinkCount = 0;</span>
+<span class="fc" id="L51">        this.type = &quot;normal&quot;;</span>
+<span class="fc" id="L52">        assignColor();</span>
+<span class="fc" id="L53">        setupBlinkTimer();</span>
+<span class="fc" id="L54">    }</span>
+
+    public int getInitialLocation() {
+<span class="fc" id="L57">        return initialLocation;</span>
+    }
+
+    public int getCurrentLocation() {
+<span class="fc" id="L61">        return currentLocation;</span>
+    }
+
+    public void setCurrentLocation(int location) {
+<span class="nc" id="L65">        this.currentLocation = location;</span>
+<span class="nc" id="L66">    }</span>
+
+    public String getType() {
+<span class="fc" id="L69">        return type;</span>
+    }
+
+    /**
+     * Verifica si el robot puede moverse a una ubicación.
+     * Puede ser sobreescrito por subclases.
+     *
+     * @param targetLocation ubicación objetivo
+     * @return true si el movimiento es válido
+     */
+    public boolean canMoveTo(int targetLocation) {
+<span class="fc" id="L80">        return true; // Los robots normales pueden moverse a cualquier lado</span>
+    }
+
+    /**
+     * Mueve el robot a una ubicación objetivo.
+     *
+     * @param targetLocation nueva ubicación
+     */
+    public void moveTo(int targetLocation) {
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (!canMoveTo(targetLocation)) {</span>
+<span class="nc" id="L90">            return;</span>
+        }
+<span class="fc" id="L92">        int targetX = road.getX(targetLocation) + 20;</span>
+<span class="fc" id="L93">        int targetY = road.getY(targetLocation) + 20;</span>
+<span class="fc" id="L94">        visualRepresentation.setPosition(targetX, targetY);</span>
+<span class="fc" id="L95">        this.currentLocation = targetLocation;</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * Regresa al robot a su posición inicial.
+     */
+    public void returnToInitialPosition() {
+<span class="fc" id="L102">        int initialX = road.getX(this.initialLocation) + 20;</span>
+<span class="fc" id="L103">        int initialY = road.getY(this.initialLocation) + 20;</span>
+<span class="fc" id="L104">        visualRepresentation.setPosition(initialX, initialY);</span>
+<span class="fc" id="L105">        this.currentLocation = this.initialLocation;</span>
+<span class="fc" id="L106">    }</span>
+
+    public void makeVisible() {
+<span class="fc" id="L109">        visualRepresentation.makeVisible();</span>
+<span class="fc" id="L110">        this.isVisible = true;</span>
+<span class="fc" id="L111">    }</span>
+
+    public void makeInvisible() {
+<span class="nc" id="L114">        this.isVisible = false;</span>
+<span class="nc" id="L115">        stopBlinking();</span>
+<span class="nc" id="L116">        visualRepresentation.makeInvisible();</span>
+<span class="nc" id="L117">    }</span>
+
+    /**
+     * Registra una ganancia de movimiento.
+     *
+     * @param profit ganancia obtenida en el movimiento
+     */
+    public void addProfit(int profit) {
+<span class="fc" id="L125">        profits.add(profit);</span>
+<span class="fc" id="L126">    }</span>
+
+    public List&lt;Integer&gt; getProfits() {
+<span class="nc" id="L129">        return new ArrayList&lt;&gt;(profits);</span>
+    }
+
+    /**
+     * @return la ganancia total acumulada
+     */
+    public int getTotalProfit() {
+<span class="fc" id="L136">        return profits.stream().mapToInt(Integer::intValue).sum();</span>
+    }
+
+    /**
+     * Recoge tenges de una tienda.
+     * Puede ser sobreescrito por subclases para comportamiento diferente.
+     *
+     * @param store la tienda de la que recoger
+     * @return cantidad de tenges recolectados
+     */
+    public int collectFrom(Store store) {
+<span class="fc" id="L147">        return store.empty(this);</span>
+    }
+
+    /**
+     * Inicia el efecto de parpadeo para el robot con mayor ganancia.
+     * El robot parpadeará 6 veces y luego se detendrá.
+     */
+    public void startBlinking() {
+<span class="pc bpc" id="L155" title="1 of 4 branches missed.">        if (!isBlinking &amp;&amp; isVisible) {</span>
+<span class="fc" id="L156">            isBlinking = true;</span>
+<span class="fc" id="L157">            blinkCount = 0;</span>
+<span class="fc" id="L158">            blinkTimer.start();</span>
+        }
+<span class="fc" id="L160">    }</span>
+
+    /**
+     * Detiene el efecto de parpadeo.
+     */
+    public void stopBlinking() {
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (isBlinking) {</span>
+<span class="fc" id="L167">            isBlinking = false;</span>
+<span class="fc" id="L168">            blinkCount = 0;</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">            if (blinkTimer != null) {</span>
+<span class="fc" id="L170">                blinkTimer.stop();</span>
+            }
+<span class="fc" id="L172">            visualRepresentation.changeColor(originalColor);</span>
+        }
+<span class="fc" id="L174">    }</span>
+
+    /**
+     * Limpia todas las ganancias registradas.
+     */
+    public void clearProfits() {
+<span class="fc" id="L180">        profits.clear();</span>
+<span class="fc" id="L181">    }</span>
+
+    /**
+     * Destruye el robot y libera recursos.
+     */
+    public void destroy() {
+<span class="nc" id="L187">        stopBlinking();</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        if (blinkTimer != null) {</span>
+<span class="nc" id="L189">            blinkTimer.stop();</span>
+<span class="nc" id="L190">            blinkTimer = null;</span>
+        }
+<span class="nc" id="L192">        makeInvisible();</span>
+<span class="nc" id="L193">    }</span>
+
+    /**
+     * Asigna un color al robot dependiendo de su tipo.
+     */
+    protected void assignColor() {
+        String newColor;
+
+<span class="fc bfc" id="L201" title="All 4 branches covered.">        switch (type) {</span>
+            case &quot;neverback&quot;:
+<span class="fc" id="L203">                newColor = &quot;red&quot;;</span>
+<span class="fc" id="L204">                break;</span>
+            case &quot;tender&quot;:
+<span class="fc" id="L206">                newColor = &quot;yellow&quot;;</span>
+<span class="fc" id="L207">                break;</span>
+            case &quot;illbeback&quot;:
+<span class="fc" id="L209">                newColor = &quot;magenta&quot;;</span>
+<span class="fc" id="L210">                break;</span>
+            default:
+<span class="fc" id="L212">                newColor = &quot;blue&quot;;</span>
+                break;
+        }
+
+<span class="fc" id="L216">        originalColor = newColor;</span>
+<span class="fc" id="L217">        visualRepresentation.changeColor(newColor);</span>
+<span class="fc" id="L218">    }</span>
+
+
+    /**
+     * Configura el timer para el efecto de parpadeo.
+     * El robot parpadea 6 veces (12 cambios de color) y luego se detiene.
+     */
+    protected void setupBlinkTimer() {
+<span class="fc" id="L226">        blinkTimer = new Timer(400, new ActionListener() {</span>
+<span class="fc" id="L227">            private boolean showOriginal = true;</span>
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+<span class="pc bpc" id="L231" title="3 of 6 branches missed.">                if (isBlinking &amp;&amp; isVisible &amp;&amp; blinkCount &lt; 12) {</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">                    if (showOriginal) {</span>
+<span class="fc" id="L233">                        visualRepresentation.changeColor(&quot;white&quot;);</span>
+<span class="fc" id="L234">                    } else {</span>
+<span class="fc" id="L235">                        visualRepresentation.changeColor(originalColor);</span>
+                    }
+<span class="fc bfc" id="L237" title="All 2 branches covered.">                    showOriginal = !showOriginal;</span>
+<span class="fc" id="L238">                    blinkCount++;</span>
+                    
+<span class="fc bfc" id="L240" title="All 2 branches covered.">                    if (blinkCount &gt;= 12) {</span>
+<span class="fc" id="L241">                        stopBlinking();</span>
+                    }
+                }
+<span class="fc" id="L244">            }</span>
+        });
+<span class="fc" id="L246">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span>project (8/11/2025 9:32:13 p. m.)</div></body></html>

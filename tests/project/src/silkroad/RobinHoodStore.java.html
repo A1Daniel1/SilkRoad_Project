@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>RobinHoodStore.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">project (8/11/2025 9:32:13 p. m.)</a> &gt; <a href="../../index.html" class="el_group">project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">silkroad</a> &gt; <span class="el_source">RobinHoodStore.java</span></div><h1>RobinHoodStore.java</h1><pre class="source lang-java linenums">package silkroad;
+import shapes.*;
+/**
+ * Tienda RobinHood que solo permite ser vaciada por robots con menos dinero que ella.
+ * 
+ * @author Daniel Ahumada y Juan Neira
+ * @version ciclo 3
+ */
+public class RobinHoodStore extends Store {
+
+    /**
+     * Constructor que crea una tienda RobinHood.
+     *
+     * @param road la carretera
+     * @param location posición de la tienda en la carretera
+     * @param tenges cantidad inicial de tenges
+     */
+    public RobinHoodStore(Road road, int location, int tenges) {
+<span class="nc" id="L19">        super(road, location, tenges);</span>
+<span class="nc" id="L20">        this.type = &quot;robinhood&quot;;</span>
+<span class="nc" id="L21">        updateAppearance();</span>
+<span class="nc" id="L22">    }</span>
+
+    /**
+     * Verifica si un robot puede vaciar esta tienda.
+     * Solo robots con menos dinero (ganancia total) que los tenges actuales pueden vaciarla.
+     *
+     * @param robot el robot que intenta vaciar la tienda
+     * @return true si el robot tiene menos dinero que la tienda
+     */
+    @Override
+    public boolean canBeEmptiedBy(Robot robot) {
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        return robot.getTotalProfit() &lt; this.currentTenges;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span>project (8/11/2025 9:32:13 p. m.)</div></body></html>

@@ -202,7 +202,7 @@ public class Canvas{
         }
 
         public void draw(Graphics2D graphic){
-            if (ref instanceof celda) {
+            if (ref instanceof Celda) {
                 graphic.setStroke(new java.awt.BasicStroke(3));
                 graphic.setColor(Color.black);
                 graphic.draw(shape);

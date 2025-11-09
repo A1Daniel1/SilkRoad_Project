@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>SilkRoadC4Test.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">project (8/11/2025 9:32:13 p. m.)</a> &gt; <a href="../../index.html" class="el_group">project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">test</a> &gt; <span class="el_source">SilkRoadC4Test.java</span></div><h1>SilkRoadC4Test.java</h1><pre class="source lang-java linenums">package test;
+import shapes.*;
+import silkroad.SilkRoad;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+/**
+ * Pruebas de unidad del ciclo 4: tipos nuevos de robots y tiendas.
+ * Compatible con BlueJ y JUnit 5.
+ */
+<span class="fc" id="L13">public class SilkRoadC4Test {</span>
+    
+    private SilkRoad road;
+    
+    @BeforeEach
+    public void setUp() {
+<span class="fc" id="L19">        road = new SilkRoad(20);</span>
+<span class="fc" id="L20">    }</span>
+
+    @Test
+    public void shouldCreateDifferentStores() {
+<span class="fc" id="L24">        road.placeStore(&quot;normal&quot;, 3, 100);</span>
+<span class="fc" id="L25">        road.placeStore(&quot;fighter&quot;, 8, 200);</span>
+<span class="fc" id="L26">        road.placeStore(&quot;autonomous&quot;, 0, 150);</span>
+<span class="fc" id="L27">        assertTrue(road.ok());</span>
+<span class="fc" id="L28">        assertEquals(3, road.stores().length, &quot;Debe haber tres tiendas creadas&quot;);</span>
+<span class="fc" id="L29">    }</span>
+
+    @Test
+    public void shouldCreateDifferentRobots() {
+<span class="fc" id="L33">        road.placeRobot(&quot;normal&quot;, 2);</span>
+<span class="fc" id="L34">        road.placeRobot(&quot;neverback&quot;, 5);</span>
+<span class="fc" id="L35">        road.placeRobot(&quot;tender&quot;, 10);</span>
+<span class="fc" id="L36">        road.placeRobot(&quot;illbeback&quot;, 15);</span>
+<span class="fc" id="L37">        assertTrue(road.ok());</span>
+<span class="fc" id="L38">        assertEquals(4, road.robots().length, &quot;Debe haber cuatro robots creados&quot;);</span>
+<span class="fc" id="L39">    }</span>
+
+    @Test
+    public void shouldCollectProfitWhenMoving() {
+<span class="fc" id="L43">        road.placeStore(6, 100);</span>
+<span class="fc" id="L44">        road.placeRobot(5);</span>
+<span class="fc" id="L45">        int before = road.profit();</span>
+<span class="fc" id="L46">        road.moveRobot(5, 1);</span>
+<span class="fc" id="L47">        assertTrue(road.ok());</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        assertTrue(road.profit() &gt; before, &quot;Debe haber recolectado ganancias&quot;);</span>
+<span class="fc" id="L49">    }</span>
+
+    @Test
+    public void neverBackRobotCannotGoBackwards() {
+<span class="fc" id="L53">        road.placeRobot(&quot;neverback&quot;, 4);</span>
+<span class="fc" id="L54">        road.moveRobot(4, 2); // avance válido</span>
+<span class="fc" id="L55">        road.moveRobot(6, -1); // no debería poder retroceder</span>
+<span class="fc" id="L56">        assertFalse(road.ok(), &quot;El robot neverback no puede devolverse&quot;);</span>
+<span class="fc" id="L57">    }</span>
+
+    @Test
+    public void tenderRobotShouldTakeHalf() {
+<span class="fc" id="L61">        road.placeStore(7, 100);</span>
+<span class="fc" id="L62">        road.placeRobot(&quot;tender&quot;, 6);</span>
+<span class="fc" id="L63">        road.moveRobot(6, 1);</span>
+<span class="fc" id="L64">        int profit = road.profit();</span>
+<span class="pc bpc" id="L65" title="2 of 4 branches missed.">        assertTrue(profit &gt; 0 &amp;&amp; profit &lt; 100, &quot;Debe haber tomado solo la mitad del dinero&quot;);</span>
+<span class="fc" id="L66">    }</span>
+
+    @Test
+    public void autonomousStoreShouldFindFreeLocation() {
+<span class="fc" id="L70">        road.placeStore(&quot;autonomous&quot;, 0, 50);</span>
+<span class="fc" id="L71">        assertTrue(road.ok(), &quot;La tienda autónoma debería ubicarse correctamente&quot;);</span>
+<span class="fc" id="L72">    }</span>
+
+    @Test
+    public void fighterStoreShouldRejectPoorRobot() {
+<span class="fc" id="L76">        road.placeStore(&quot;fighter&quot;, 9, 300);</span>
+<span class="fc" id="L77">        road.placeRobot(7);</span>
+<span class="fc" id="L78">        road.moveRobot(7, 2);</span>
+<span class="nc" id="L79">        assertFalse(road.ok(), &quot;El robot sin dinero no puede vaciar una tienda fighter&quot;);</span>
+<span class="nc" id="L80">    }</span>
+
+    @Test
+    public void rebootShouldResetProfits() {
+<span class="fc" id="L84">        road.placeStore(5, 80);</span>
+<span class="fc" id="L85">        road.placeRobot(4);</span>
+<span class="fc" id="L86">        road.moveRobot(4, 1);</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        assertTrue(road.profit() &gt; 0);</span>
+<span class="fc" id="L88">        road.reboot();</span>
+<span class="fc" id="L89">        assertEquals(0, road.profit(), &quot;Después del reinicio la ganancia debe ser 0&quot;);</span>
+<span class="fc" id="L90">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span>project (8/11/2025 9:32:13 p. m.)</div></body></html>
